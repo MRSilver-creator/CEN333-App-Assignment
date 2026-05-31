@@ -17,6 +17,7 @@ import { MTableComponent }       from '../../m-framework/components/m-table/m-ta
 import { MAhaComponent }         from '../../m-framework/components/m-aha/m-aha.component';
 import { MSearchButtonComponent }from '../../m-framework/components/m-search-button/m-search-button.component';
 import { MResultBoxComponent }   from '../../m-framework/components/m-result-box/m-result-box.component';
+import { MDeleteButtonComponent } from '../../m-framework/components/m-delete-button/m-delete-button.component';
 
 // Warehouse location constant
 const WAREHOUSE = { lat: 24.4539, lng: 54.3773 }; // Abu Dhabi city centre
@@ -29,7 +30,8 @@ declare const google: any;
   imports: [
     CommonModule, FormsModule,
     MHeaderComponent, MContainerComponent, MFormUlaComponent,
-    MTableComponent, MAhaComponent, MSearchButtonComponent, MResultBoxComponent
+    MTableComponent, MAhaComponent, MSearchButtonComponent, MResultBoxComponent,
+    MDeleteButtonComponent
   ],
   templateUrl: './dispatch.component.html',
   styleUrl: './dispatch.component.css'
@@ -65,6 +67,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
   private activeInfoWindow: any = null;
   private activePolyline: any = null;
   private clickMarker: any = null;
+  private selectedDeliveryId: string | null = null;
 
   // ── AI state ──────────────────────────────────────────────────────────────
   generatingFor: string | null = null;   // id of delivery being processed
@@ -182,11 +185,12 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const currentIds = new Set(this.deliveries.map(d => d.id!));
 
-    // Remove stale markers
+    // Remove stale markers (covers deletions surfaced by the onValue listener)
     for (const [id, marker] of this.deliveryMarkers) {
       if (!currentIds.has(id)) {
         marker.setMap(null);
         this.deliveryMarkers.delete(id);
+        if (this.selectedDeliveryId === id) this.clearSelection();
       }
     }
 
@@ -260,6 +264,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
     const iw = new google.maps.InfoWindow({ content });
     iw.open(this.map, marker);
     this.activeInfoWindow = iw;
+    this.selectedDeliveryId = delivery.id ?? null;
 
     // Attach button handler after DOM renders
     google.maps.event.addListener(iw, 'domready', () => {
@@ -270,6 +275,36 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       }
     });
+  }
+
+  private clearSelection(): void {
+    if (this.activeInfoWindow) { this.activeInfoWindow.close(); this.activeInfoWindow = null; }
+    if (this.activePolyline) { this.activePolyline.setMap(null); this.activePolyline = null; }
+    this.selectedDeliveryId = null;
+  }
+
+  // ── Delete ──────────────────────────────────────────────────────────────
+
+  async onDelete(id: string): Promise<void> {
+    this.validationError = '';
+    this.successMessage  = '';
+
+    try {
+      await this.fb.deleteDelivery(id);
+
+      // If the deleted delivery was selected, clear its info window / polyline.
+      if (this.selectedDeliveryId === id) this.clearSelection();
+
+      // Remove its marker from the map and local store immediately.
+      const marker = this.deliveryMarkers.get(id);
+      if (marker) {
+        marker.setMap(null);
+        this.deliveryMarkers.delete(id);
+      }
+    } catch (e) {
+      this.validationError = e instanceof Error ? e.message : 'Failed to delete delivery request.';
+      console.error('deleteDelivery failed:', e);
+    }
   }
 
   // ── AI Instruction ────────────────────────────────────────────────────────

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, push, onValue, update } from 'firebase/database';
+import { getDatabase, ref, push, onValue, update, remove } from 'firebase/database';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environments';
 
@@ -62,6 +62,11 @@ export class FirebaseService {
   updateDelivery(id: string, changes: Partial<DeliveryRequest>): Promise<void> {
     if (!this.db) return Promise.reject(new Error('Firebase is not configured.'));
     return update(ref(this.db, `deliveries/${id}`), changes as any);
+  }
+
+  deleteDelivery(id: string): Promise<void> {
+    if (!this.db) return Promise.reject(new Error('Firebase is not configured.'));
+    return remove(ref(this.db, 'deliveries/' + id));
   }
 
   getDeliveries(): DeliveryRequest[] {
