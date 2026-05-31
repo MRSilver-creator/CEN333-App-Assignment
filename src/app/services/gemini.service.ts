@@ -14,7 +14,8 @@ export class GeminiService {
     distanceKm: number
   ): Promise<string> {
 
-    if (!environment.geminiApiKey) {
+    const apiKey = environment.geminiApiKey?.trim();
+    if (!apiKey) {
       throw new Error('Gemini API key is missing. Set geminiApiKey in environments.ts.');
     }
 
@@ -27,7 +28,7 @@ export class GeminiService {
       `- Distance from warehouse: ${distanceKm} km\n` +
       `Be concise, specific, and professional. Include timing advice appropriate to the priority level.`;
 
-    const url = `${this.endpoint}?key=${environment.geminiApiKey}`;
+    const url = `${this.endpoint}?key=${encodeURIComponent(apiKey)}`;
 
     const body = {
       contents: [{ parts: [{ text: prompt }] }]
