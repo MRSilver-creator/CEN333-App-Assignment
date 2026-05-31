@@ -19,30 +19,47 @@ export interface DeliveryRequest {
 @Injectable({ providedIn: 'root' })
 export class FirebaseService {
 
-  private db: any;
+  private db: any = null;
 
   private _deliveries$ = new BehaviorSubject<DeliveryRequest[]>([]);
   deliveries$: Observable<DeliveryRequest[]> = this._deliveries$.asObservable();
 
   constructor() {
-    const app = initializeApp(environment.firebaseConfig);
-    this.db = getDatabase(app);
+    // Initializing the Realtime Database with an empty/invalid databaseURL
+    // throws a FATAL error. That would happen during DI when DispatchComponent
+    // is constructed, aborting the route render and leaving a blank page.
+    // Guard initialization so an unconfigured Firebase degrades to an empty
+    // delivery list instead of crashing the app.
+    if (!environment.firebaseConfig?.databaseURL) {
+      console.warn('FirebaseService: firebaseConfig.databaseURL is not set — running without realtime data.');
+      return;
+    }
 
-    // Real-time listener
-    onValue(ref(this.db, 'deliveries'), (snapshot) => {
-      const data = snapshot.val();
-      const list: DeliveryRequest[] = data
-        ? Object.keys(data).map(k => ({ id: k, ...data[k] }))
-        : [];
-      this._deliveries$.next(list);
-    });
+    try {
+      const app = initializeApp(environment.firebaseConfig);
+      this.db = getDatabase(app);
+
+      // Real-time listener
+      onValue(ref(this.db, 'deliveries'), (snapshot) => {
+        const data = snapshot.val();
+        const list: DeliveryRequest[] = data
+          ? Object.keys(data).map(k => ({ id: k, ...data[k] }))
+          : [];
+        this._deliveries$.next(list);
+      });
+    } catch (e) {
+      console.error('FirebaseService: failed to initialize Firebase.', e);
+      this.db = null;
+    }
   }
 
   saveDelivery(delivery: Omit<DeliveryRequest, 'id'>): Promise<string> {
+    if (!this.db) return Promise.reject(new Error('Firebase is not configured.'));
     return push(ref(this.db, 'deliveries'), delivery).then(r => r.key ?? '');
   }
 
   updateDelivery(id: string, changes: Partial<DeliveryRequest>): Promise<void> {
+    if (!this.db) return Promise.reject(new Error('Firebase is not configured.'));
     return update(ref(this.db, `deliveries/${id}`), changes as any);
   }
 
