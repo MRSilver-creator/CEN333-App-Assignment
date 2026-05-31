@@ -7,11 +7,7 @@
     <span class="logo-bracket">[</span>QD<span class="logo-bracket">]</span>
     <span class="logo-sub">QUICKDISPATCH</span>
   </div>
-  <ul class="nav-links">
-    <li><a href="#about" class="nav-a">ABOUT</a></li>
-    <li><a href="#features" class="nav-a">FEATURES</a></li>
-    <li><button class="nav-cta" (click)="goToDispatch()">LAUNCH APP <span class="arrow">→</span></button></li>
-  </ul>
+  <m-main-menu class="nav-menu" [menuitems]="navItems" (menuclick)="onNavClick($event)"></m-main-menu>
 </nav>
 
 <!-- ── HERO ──────────────────────────────────────────────────────────────── -->
@@ -47,25 +43,13 @@
 
     <!-- Live stats strip -->
     <div class="stats-strip">
-      <div class="stat">
-        <span class="stat-val">∞</span>
-        <span class="stat-label">Real-time sync</span>
-      </div>
-      <div class="stat-divider"></div>
-      <div class="stat">
-        <span class="stat-val">±0.01km</span>
-        <span class="stat-label">Haversine accuracy</span>
-      </div>
-      <div class="stat-divider"></div>
-      <div class="stat">
-        <span class="stat-val">AI</span>
-        <span class="stat-label">Gemini briefings</span>
-      </div>
-      <div class="stat-divider"></div>
-      <div class="stat">
-        <span class="stat-val">3</span>
-        <span class="stat-label">Priority tiers</span>
-      </div>
+      <ng-container *ngFor="let stat of stats; let last = last">
+        <div class="stat">
+          <span class="stat-val">{{ stat.value }}</span>
+          <span class="stat-label">{{ stat.label }}</span>
+        </div>
+        <div *ngIf="!last" class="stat-divider"></div>
+      </ng-container>
     </div>
   </div>
 
@@ -96,13 +80,13 @@
   <div class="section-header">
     <span class="section-tag">// ABOUT</span>
     <h2 class="section-h2">What is QuickDispatch?</h2>
-    <p class="section-sub">
+    <m-container>
       A cloud-connected dispatch tool built for small logistics teams.
       Dispatchers create delivery requests by tapping on a Google Map —
       the app computes distances, syncs to Firebase in real time across every
       device, and Gemini AI generates a professional 2-sentence courier
       briefing for each drop-off.
-    </p>
+    </m-container>
   </div>
 </section>
 
@@ -111,51 +95,12 @@
   <span class="section-tag">// FEATURES</span>
   <h2 class="section-h2">What it does</h2>
 
-  <div class="feat-grid">
-
-    <div class="feat-card">
-      <div class="feat-num">01</div>
-      <div class="feat-icon">📍</div>
-      <h3>Map-Click Location</h3>
-      <p>Tap anywhere on the Google Map to pin a delivery. Lat/lng captured instantly.</p>
-    </div>
-
-    <div class="feat-card">
-      <div class="feat-num">02</div>
-      <div class="feat-icon">🔄</div>
-      <h3>Real-Time Firebase Sync</h3>
-      <p>New deliveries appear on every device the moment they're saved — no refresh needed.</p>
-    </div>
-
-    <div class="feat-card">
-      <div class="feat-num">03</div>
-      <div class="feat-icon">📐</div>
-      <h3>Haversine Distance</h3>
-      <p>Straight-line distance from warehouse to delivery, computed with the Haversine formula.</p>
-    </div>
-
-    <div class="feat-card">
-      <div class="feat-num">04</div>
-      <div class="feat-icon">🤖</div>
-      <h3>Gemini AI Briefings</h3>
-      <p>One tap generates a 2-sentence courier instruction, saved back to the cloud for all dispatchers.</p>
-    </div>
-
-    <div class="feat-card">
-      <div class="feat-num">05</div>
-      <div class="feat-icon">🗺️</div>
-      <h3>Color-Coded Markers</h3>
-      <p>Green = Standard · Amber = Express · Red = Urgent. Route polyline drawn on marker tap.</p>
-    </div>
-
-    <div class="feat-card">
-      <div class="feat-num">06</div>
-      <div class="feat-icon">⭐</div>
-      <h3>Nearest Highlight</h3>
-      <p>The table automatically highlights the delivery closest to the warehouse so dispatchers can prioritize.</p>
-    </div>
-
-  </div>
+  <m-table
+    class="feat-table"
+    [data]="features"
+    [columnsToBeDisplayed]="featureColumns"
+    [tableHeaders]="featureHeaders">
+  </m-table>
 </section>
 
 <!-- ── CTA ────────────────────────────────────────────────────────────────── -->

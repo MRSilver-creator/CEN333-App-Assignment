@@ -17,7 +17,7 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── Scanlines overlay ──────────────────────────────────────────────────── */
+/* Scanlines overlay */
 .scanlines {
   position: fixed;
   inset: 0;
@@ -32,7 +32,7 @@
   );
 }
 
-/* ── NAV ────────────────────────────────────────────────────────────────── */
+/* NAV */
 .nav {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -64,40 +64,28 @@
   margin-left: .2rem;
 }
 
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  list-style: none;
+/* Nav menu — rendered via <m-main-menu> */
+.nav-menu ::ng-deep .pure-menu-list {
+  display: flex; align-items: center; gap: 1.2rem;
+  list-style: none; margin: 0; padding: 0;
 }
-
-.nav-a {
-  font-family: var(--mono);
-  font-size: .75rem;
-  letter-spacing: .15em;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color .2s;
+.nav-menu ::ng-deep .pure-menu-item { margin: 0; }
+.nav-menu ::ng-deep .pure-button {
+  font-family: var(--mono); font-size: .75rem; letter-spacing: .15em;
+  text-transform: uppercase; background: transparent; color: var(--muted);
+  border: none; padding: .4rem .2rem; cursor: pointer; transition: color .2s;
 }
-.nav-a:hover { color: var(--white); }
-
-.nav-cta {
-  font-family: var(--mono);
-  font-size: .75rem;
-  letter-spacing: .1em;
-  background: var(--orange);
-  color: #fff;
-  border: none;
-  padding: .5rem 1.2rem;
-  cursor: pointer;
-  transition: background .2s, transform .15s;
+.nav-menu ::ng-deep .pure-button:hover { color: var(--white); }
+/* Trailing "Launch App" item is styled as the primary CTA. */
+.nav-menu ::ng-deep .pure-menu-item:last-child .pure-button {
+  background: var(--orange); color: #fff; padding: .5rem 1.2rem;
   clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
 }
-.nav-cta:hover { background: var(--orange-d); transform: translateY(-1px); }
-.arrow { display: inline-block; transition: transform .2s; }
-.nav-cta:hover .arrow { transform: translateX(3px); }
+.nav-menu ::ng-deep .pure-menu-item:last-child .pure-button:hover {
+  background: var(--orange-d); color: #fff;
+}
 
-/* ── HERO ───────────────────────────────────────────────────────────────── */
+/* HERO */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -335,7 +323,7 @@
   50%       { opacity: 0; }
 }
 
-/* ── ABOUT ──────────────────────────────────────────────────────────────── */
+/* ABOUT */
 .about {
   padding: 6rem 3rem;
   border-top: 1px solid var(--border);
@@ -344,7 +332,14 @@
   text-align: center;
 }
 
-/* ── FEATURES ───────────────────────────────────────────────────────────── */
+/* Neutralise m-container's absolute positioning in this static section. */
+.about ::ng-deep .content-wrapper { position: static; width: 100%; min-height: 0; }
+.about ::ng-deep .content {
+  font-family: var(--display) !important; font-size: 1rem !important;
+  color: var(--muted); line-height: 1.8; text-align: center !important;
+}
+
+/* FEATURES */
 .features {
   padding: 4rem 3rem 6rem;
   border-top: 1px solid var(--border);
@@ -370,59 +365,37 @@
   letter-spacing: -.01em;
   margin-bottom: 1rem;
 }
-.section-sub {
-  font-family: var(--display);
-  font-size: 1rem;
-  color: var(--muted);
-  line-height: 1.8;
+
+/* Features — rendered via <m-table> */
+.feat-table { display: block; margin-top: 3rem; }
+.feat-table ::ng-deep table.pure-table {
+  width: 100%; border-collapse: collapse;
+  border: 1px solid var(--border); background: var(--surface);
+}
+.feat-table ::ng-deep thead th {
+  font-family: var(--mono); font-size: .68rem; letter-spacing: .15em;
+  text-transform: uppercase; color: var(--orange); text-align: left;
+  padding: 1rem 1.2rem; background: rgba(255,255,255,.03);
+  border-bottom: 1px solid var(--border);
+}
+.feat-table ::ng-deep tbody td {
+  font-family: var(--display); font-size: .92rem; color: var(--muted);
+  padding: 1rem 1.2rem; border-top: 1px solid var(--border); vertical-align: middle;
+}
+.feat-table ::ng-deep tbody tr { transition: background .2s; }
+.feat-table ::ng-deep tbody tr:hover { background: #1c1e22; }
+/* col 1 = number, col 2 = icon, col 3 = title (emphasised). */
+.feat-table ::ng-deep tbody td:first-child {
+  font-family: var(--mono); font-size: .72rem; color: var(--orange);
+  letter-spacing: .12em; width: 3rem;
+}
+.feat-table ::ng-deep tbody td:nth-child(2) { font-size: 1.4rem; width: 3rem; }
+.feat-table ::ng-deep tbody td:nth-child(3) {
+  font-family: var(--display); font-weight: 700; text-transform: uppercase;
+  letter-spacing: .04em; color: var(--white); white-space: nowrap;
 }
 
-.feat-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border);
-  margin-top: 3rem;
-  border: 1px solid var(--border);
-}
-
-.feat-card {
-  background: var(--surface);
-  padding: 2rem 1.6rem;
-  position: relative;
-  transition: background .2s;
-}
-.feat-card:hover { background: #1c1e22; }
-
-.feat-num {
-  font-family: var(--mono);
-  font-size: .68rem;
-  color: var(--orange);
-  letter-spacing: .15em;
-  margin-bottom: .8rem;
-  opacity: .7;
-}
-.feat-icon {
-  font-size: 1.6rem;
-  margin-bottom: .7rem;
-}
-.feat-card h3 {
-  font-family: var(--display);
-  font-size: 1.05rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-  color: var(--white);
-  margin-bottom: .5rem;
-}
-.feat-card p {
-  font-family: var(--display);
-  font-size: .88rem;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-/* ── CTA ────────────────────────────────────────────────────────────────── */
+/* CTA */
 .cta-section {
   border-top: 1px solid var(--border);
   padding: 6rem 3rem;
@@ -448,7 +421,7 @@
   margin-bottom: 2rem;
 }
 
-/* ── FOOTER ─────────────────────────────────────────────────────────────── */
+/* FOOTER */
 .footer {
   border-top: 1px solid var(--border);
   padding: 1.6rem 3rem;

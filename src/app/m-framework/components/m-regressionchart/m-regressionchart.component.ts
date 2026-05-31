@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnChanges,
   AfterViewInit, SimpleChanges } from '@angular/core';
 import { Chart } from 'chart.js/auto';
 import { polynomialRegression, evaluatePolynomial }
-  from '../../../features/vitaltrend/regression.helper';
+  from './regression.helper';
 
 @Component({
   selector: 'm-regressionchart',
