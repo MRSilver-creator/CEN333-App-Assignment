@@ -343,9 +343,11 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
       if (load) load.style.display = 'none';
 
     } catch (e) {
+      const message = e instanceof Error ? e.message : 'Failed to generate instructions.';
+      if (text) text.textContent = `⚠️ ${message}`;
       if (btn)  { btn.disabled = false; btn.textContent = '🤖 Generate Instructions'; }
       if (load) load.style.display = 'none';
-      console.error(e);
+      console.error('generateInstruction failed:', e);
     }
 
     this.generatingFor = null;
