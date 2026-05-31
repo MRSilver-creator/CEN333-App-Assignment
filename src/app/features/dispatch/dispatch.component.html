@@ -76,11 +76,27 @@
         <m-search-button (search)="onSearch($event)"></m-search-button>
       </div>
 
+      <div class="filter-row">
+        <label class="field-label">Priority</label>
+        <select class="pure-input-1 field-input"
+                [(ngModel)]="priorityFilter"
+                (ngModelChange)="onPriorityFilter($event)">
+          <option value="">All</option>
+          <option value="Standard">Standard</option>
+          <option value="Express">Express</option>
+          <option value="Urgent">Urgent</option>
+        </select>
+      </div>
+
       <div *ngIf="deliveries.length === 0" class="empty-state">
         No deliveries yet. Add one using the form above.
       </div>
 
-      <div *ngIf="deliveries.length > 0" class="table-scroll">
+      <div *ngIf="deliveries.length > 0 && filteredDeliveries.length === 0" class="empty-state">
+        No deliveries match the current filters.
+      </div>
+
+      <div *ngIf="filteredDeliveries.length > 0" class="table-scroll">
         <!-- Custom table with nearest highlight -->
         <table class="pure-table dispatch-table">
           <thead>
@@ -93,7 +109,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let d of deliveries"
+            <tr *ngFor="let d of filteredDeliveries"
                 [class.nearest-row]="isNearest(d)"
                 [class.urgent-row]="d.priority === 'Urgent'"
                 [class.express-row]="d.priority === 'Express'">
@@ -104,7 +120,7 @@
                   {{ d.priority }}
                 </span>
               </td>
-              <td>{{ d.distance }}</td>
+              <td>{{ d.distance.toFixed(2) }}</td>
               <td class="instruction-cell">
                 <span *ngIf="d.aiInstruction; else noInstr">{{ d.aiInstruction }}</span>
                 <ng-template #noInstr><em class="muted">Not generated</em></ng-template>

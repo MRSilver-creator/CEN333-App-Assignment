@@ -13,6 +13,7 @@ export interface DeliveryRequest {
   lng: number;
   distance: number;           // km, Haversine from warehouse
   timestamp: string;
+  status: 'pending' | 'delivered';
   aiInstruction?: string;
 }
 
@@ -43,7 +44,7 @@ export class FirebaseService {
       onValue(ref(this.db, 'deliveries'), (snapshot) => {
         const data = snapshot.val();
         const list: DeliveryRequest[] = data
-          ? Object.keys(data).map(k => ({ id: k, ...data[k] }))
+          ? Object.keys(data).map(k => ({ status: 'pending', id: k, ...data[k] }))
           : [];
         this._deliveries$.next(list);
       });

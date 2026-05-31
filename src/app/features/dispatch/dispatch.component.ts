@@ -52,6 +52,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
   // ── Data ──────────────────────────────────────────────────────────────────
   deliveries: DeliveryRequest[] = [];
   filterTerm = '';
+  priorityFilter = '';
 
   // ── Table display ─────────────────────────────────────────────────────────
   tableHeaders      = ['Customer', 'Weight (kg)', 'Priority', 'Distance (km)', 'AI Instruction'];
@@ -243,7 +244,7 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
         <table style="width:100%;font-size:.82rem;border-collapse:collapse">
           <tr><td style="color:#6b7280;padding:2px 6px 2px 0">Weight</td><td><strong>${delivery.packageWeight} kg</strong></td></tr>
           <tr><td style="color:#6b7280;padding:2px 6px 2px 0">Priority</td><td><strong style="color:${this.markerColor(delivery.priority)}">${delivery.priority}</strong></td></tr>
-          <tr><td style="color:#6b7280;padding:2px 6px 2px 0">Distance</td><td><strong>${delivery.distance} km</strong></td></tr>
+          <tr><td style="color:#6b7280;padding:2px 6px 2px 0">Distance</td><td><strong>${delivery.distance.toFixed(2)} km</strong></td></tr>
         </table>
         ${instrHtml}
         <p id="${loadId}" style="color:#6b7280;font-size:.78rem;font-style:italic;display:none">Generating…</p>
@@ -348,7 +349,8 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
       lat:           this.selectedLat,
       lng:           this.selectedLng,
       distance:      dist,
-      timestamp:     new Date().toISOString()
+      timestamp:     new Date().toISOString(),
+      status:        'pending'
     };
 
     try {
@@ -386,10 +388,13 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // ── Table helpers ─────────────────────────────────────────────────────────
 
+  // Nearest pending delivery is computed from the FULL unfiltered list,
+  // considering only deliveries with status === 'pending'.
   get nearestDeliveryId(): string | null {
-    if (!this.deliveries.length) return null;
-    let nearest = this.deliveries[0];
-    for (const d of this.deliveries) {
+    const pending = this.deliveries.filter(d => d.status === 'pending');
+    if (!pending.length) return null;
+    let nearest = pending[0];
+    for (const d of pending) {
       if (d.distance < nearest.distance) nearest = d;
     }
     return nearest.id ?? null;
@@ -403,10 +408,25 @@ export class DispatchComponent implements OnInit, OnDestroy, AfterViewInit {
     this.filterTerm = term;
   }
 
+  onPriorityFilter(priority: string): void {
+    this.priorityFilter = priority;
+  }
+
+  // Deliveries after applying the Customer Name and Priority filters.
+  get filteredDeliveries(): DeliveryRequest[] {
+    const term = this.filterTerm.trim().toLowerCase();
+    return this.deliveries.filter(d => {
+      const matchesName = !term || d.customerName.toLowerCase().includes(term);
+      const matchesPriority = !this.priorityFilter || d.priority === this.priorityFilter;
+      return matchesName && matchesPriority;
+    });
+  }
+
   // Table display data (flatten aiInstruction for table)
   get tableData(): any[] {
-    return this.deliveries.map(d => ({
+    return this.filteredDeliveries.map(d => ({
       ...d,
+      distance: d.distance.toFixed(2),
       aiInstruction: d.aiInstruction ?? '—'
     }));
   }
