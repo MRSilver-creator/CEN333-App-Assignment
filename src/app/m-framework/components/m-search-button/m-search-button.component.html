@@ -1,0 +1,8 @@
+<div class="wrapper">
+    <div class="searchbox">
+        <input type="text" class="input" placeholder="Search Here …." #inputField (input)="onSearch(inputField.value)">
+        <div class="searchbtn" (click)="toggleSearch()" #searchBtn>
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+</div>

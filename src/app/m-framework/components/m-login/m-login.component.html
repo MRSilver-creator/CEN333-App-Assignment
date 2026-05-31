@@ -1,0 +1,76 @@
+<section>
+    <div class="container" id="container"
+         [class.right-panel-active]="rightPanelActive">
+  
+      <!-- Sign Up Form -->
+      <div class="form-container sign-up-container">
+        <form>
+          <h1>Sign Up</h1>
+          <br>
+          <label>
+            <input type="text" placeholder="Name"
+                   [(ngModel)]="signupName" name="signupName" />
+          </label>
+          <label>
+            <input type="email" placeholder="Email"
+                   [(ngModel)]="signupEmail" name="signupEmail" />
+          </label>
+          <label>
+            <input type="password" placeholder="Password"
+                   [(ngModel)]="signupPassword" name="signupPassword" />
+          </label>
+          @if (signupError !== '') {
+            <p style="color: red; font-size: 0.85rem;">{{ signupError }}</p>
+          }
+          @if (signupSuccess !== '') {
+            <p style="color: green; font-size: 0.85rem;">{{ signupSuccess }}</p>
+          }
+          <button type="button" id="signUp" (click)="checkSignUp()">
+            Sign Up
+          </button>
+        </form>
+      </div>
+  
+      <!-- Sign In Form -->
+      <div class="form-container sign-in-container">
+        <form>
+          <h1>Sign in</h1>
+          <br>
+          <label>
+            <input type="email" placeholder="Email"
+                   [(ngModel)]="loginEmail" name="loginEmail" />
+          </label>
+          <label>
+            <input type="password" placeholder="Password"
+                   [(ngModel)]="loginPassword" name="loginPassword" />
+          </label>
+          @if (loginError !== '') {
+            <p style="color: red; font-size: 0.85rem;">{{ loginError }}</p>
+          }
+          <button type="button" id="signIn"
+                  (click)="deactivateRightPanel(); checkLogin()">
+            Sign In
+          </button>
+        </form>
+      </div>
+  
+      <!-- Overlay (unchanged) -->
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h1 class="create">Log in</h1>
+            <p>Sign in here if you already have an account</p>
+            <button id="signIn" class="ghost"
+                    (click)="deactivateRightPanel()">Sign In</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h1 class="create">Create, Account!</h1>
+            <p>Sign up if you still don't have an account ...</p>
+            <button id="signUp" class="ghost"
+                    (click)="activateRightPanel()">Sign Up</button>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </section>

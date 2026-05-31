@@ -1,0 +1,20 @@
+
+// Creates Certificate 
+
+openssl req -x509 -newkey rsa:2048 -nodes \                                                            
+  -keyout localhost.key \
+  -out localhost.crt \
+  -days 365 \
+  -subj "/CN=localhost"
+
+  mkdir ssl
+
+  mv localhost.* ssl
+
+  
+  // Serve HTTPS 
+  ng serve --ssl true --ssl-cert ssl/localhost.crt --ssl-key ssl/localhost.key --host 0.0.0.0 --port 4201
+
+  // Serve on Device - HTTP - Device on LAN can access
+  ng serve --host 0.0.0.0 --port 4200
+

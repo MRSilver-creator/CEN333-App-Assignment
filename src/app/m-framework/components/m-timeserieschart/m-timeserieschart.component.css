@@ -1,0 +1,13 @@
+.chart-wrapper {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 2px 12px rgba(26, 43, 74, 0.08);
+    border: 1px solid #E2E8F0;
+}
+
+.chart-wrapper canvas {
+    width: 100% !important;
+    min-height: 280px;
+}

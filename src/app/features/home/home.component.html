@@ -1,0 +1,176 @@
+<!-- ── Scan-line overlay ───────────────────────────────────────────────── -->
+<div class="scanlines" aria-hidden="true"></div>
+
+<!-- ── NAV ───────────────────────────────────────────────────────────────── -->
+<nav class="nav">
+  <div class="nav-logo">
+    <span class="logo-bracket">[</span>QD<span class="logo-bracket">]</span>
+    <span class="logo-sub">QUICKDISPATCH</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#about" class="nav-a">ABOUT</a></li>
+    <li><a href="#features" class="nav-a">FEATURES</a></li>
+    <li><button class="nav-cta" (click)="goToDispatch()">LAUNCH APP <span class="arrow">→</span></button></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ──────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <!-- Animated grid background -->
+  <div class="grid-bg" aria-hidden="true"></div>
+
+  <!-- Decorative blobs -->
+  <div class="blob blob-1" aria-hidden="true"></div>
+  <div class="blob blob-2" aria-hidden="true"></div>
+
+  <div class="hero-inner">
+    <div class="hero-label">
+      <span class="dot"></span> LOGISTICS DISPATCH SYSTEM v2.0
+    </div>
+
+    <h1 class="hero-h1">
+      ROUTE.<br>TRACK.<br><span class="h1-accent">DELIVER.</span>
+    </h1>
+
+    <p class="hero-p">
+      Cloud-connected delivery management for field teams.
+      Pin drop-offs on a live map, compute distances automatically,
+      and generate AI courier briefings — all synced in real time.
+    </p>
+
+    <div class="hero-actions">
+      <button class="btn-primary" (click)="goToDispatch()">
+        OPEN DISPATCH BOARD
+      </button>
+      <a href="#about" class="btn-ghost">LEARN MORE ↓</a>
+    </div>
+
+    <!-- Live stats strip -->
+    <div class="stats-strip">
+      <div class="stat">
+        <span class="stat-val">∞</span>
+        <span class="stat-label">Real-time sync</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-val">±0.01km</span>
+        <span class="stat-label">Haversine accuracy</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-val">AI</span>
+        <span class="stat-label">Gemini briefings</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-val">3</span>
+        <span class="stat-label">Priority tiers</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decorative terminal card -->
+  <div class="terminal-card" aria-hidden="true">
+    <div class="terminal-bar">
+      <span class="tb-dot red"></span>
+      <span class="tb-dot amber"></span>
+      <span class="tb-dot green"></span>
+      <span class="tb-title">dispatch_log.sh</span>
+    </div>
+    <div class="terminal-body">
+      <p><span class="t-prompt">$</span> <span class="t-cmd">connect firebase --realtime</span></p>
+      <p class="t-ok">✓ Connected · 3 devices online</p>
+      <p><span class="t-prompt">$</span> <span class="t-cmd">fetch deliveries --all</span></p>
+      <p class="t-ok">✓ 12 deliveries loaded</p>
+      <p><span class="t-prompt">$</span> <span class="t-cmd">haversine --from warehouse</span></p>
+      <p class="t-ok">✓ Distances computed</p>
+      <p><span class="t-prompt">$</span> <span class="t-cmd">gemini generate --briefing</span></p>
+      <p class="t-ok">✓ AI instructions ready</p>
+      <p class="t-cursor"><span class="t-prompt">$</span> <span class="blink">_</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ──────────────────────────────────────────────────────────────── -->
+<section class="about" id="about">
+  <div class="section-header">
+    <span class="section-tag">// ABOUT</span>
+    <h2 class="section-h2">What is QuickDispatch?</h2>
+    <p class="section-sub">
+      A cloud-connected dispatch tool built for small logistics teams.
+      Dispatchers create delivery requests by tapping on a Google Map —
+      the app computes distances, syncs to Firebase in real time across every
+      device, and Gemini AI generates a professional 2-sentence courier
+      briefing for each drop-off.
+    </p>
+  </div>
+</section>
+
+<!-- ── FEATURES ───────────────────────────────────────────────────────────── -->
+<section class="features" id="features">
+  <span class="section-tag">// FEATURES</span>
+  <h2 class="section-h2">What it does</h2>
+
+  <div class="feat-grid">
+
+    <div class="feat-card">
+      <div class="feat-num">01</div>
+      <div class="feat-icon">📍</div>
+      <h3>Map-Click Location</h3>
+      <p>Tap anywhere on the Google Map to pin a delivery. Lat/lng captured instantly.</p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-num">02</div>
+      <div class="feat-icon">🔄</div>
+      <h3>Real-Time Firebase Sync</h3>
+      <p>New deliveries appear on every device the moment they're saved — no refresh needed.</p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-num">03</div>
+      <div class="feat-icon">📐</div>
+      <h3>Haversine Distance</h3>
+      <p>Straight-line distance from warehouse to delivery, computed with the Haversine formula.</p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-num">04</div>
+      <div class="feat-icon">🤖</div>
+      <h3>Gemini AI Briefings</h3>
+      <p>One tap generates a 2-sentence courier instruction, saved back to the cloud for all dispatchers.</p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-num">05</div>
+      <div class="feat-icon">🗺️</div>
+      <h3>Color-Coded Markers</h3>
+      <p>Green = Standard · Amber = Express · Red = Urgent. Route polyline drawn on marker tap.</p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-num">06</div>
+      <div class="feat-icon">⭐</div>
+      <h3>Nearest Highlight</h3>
+      <p>The table automatically highlights the delivery closest to the warehouse so dispatchers can prioritize.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── CTA ────────────────────────────────────────────────────────────────── -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <p class="cta-tag">READY TO DISPATCH?</p>
+    <h2 class="cta-h2">Start managing deliveries now.</h2>
+    <button class="btn-primary btn-lg" (click)="goToDispatch()">OPEN DISPATCH BOARD →</button>
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="footer-logo">
+    <span class="logo-bracket">[</span>QD<span class="logo-bracket">]</span> QUICKDISPATCH
+  </div>
+  <p class="footer-copy">CEN333 / BME433 · Assignment 4</p>
+</footer>

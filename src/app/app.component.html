@@ -1,0 +1,11 @@
+@if (showGlobalShell) {
+  <m-header [title]="titleName"
+            [features]="['Map', 'Report', 'Route', 'Profile', 'Leaderboard']">
+  </m-header>
+  <div class="app-page-content">
+    <router-outlet></router-outlet>
+  </div>
+  <div class="footer">Designed by Menatallah Naeim &amp; Wassim Habashi &amp; Ahmed Hemada &nbsp;·&nbsp; CEN333</div>
+} @else {
+  <router-outlet></router-outlet>
+}

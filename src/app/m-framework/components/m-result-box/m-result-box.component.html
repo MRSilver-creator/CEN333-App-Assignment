@@ -1,0 +1,12 @@
+<div [ngClass]="class" class="resultbox posts pure-u-1-1 is-center">
+    <section class="post">
+        <header class="post-header">
+            <p class="post-title">
+                <i *ngIf="class === 'warning'" class="fas fa-exclamation-triangle"></i>
+                <i *ngIf="class === 'error'" class="fas fa-times-circle"></i>
+                <i *ngIf="class === 'success'" class="fas fa-check-circle"></i>
+                {{label}}: <ng-content></ng-content> 
+            </p>
+        </header>
+    </section>
+</div>

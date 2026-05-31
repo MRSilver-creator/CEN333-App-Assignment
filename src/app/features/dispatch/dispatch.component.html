@@ -1,0 +1,136 @@
+<!-- ── Top Header ─────────────────────────────────────────────────────────── -->
+<m-header
+  title="QuickDispatch"
+  homename="Home"
+  [features]="['Dispatch']">
+</m-header>
+
+<!-- ── Main Page Layout ──────────────────────────────────────────────────── -->
+<div class="dispatch-layout">
+
+  <!-- ── LEFT: Form + Table ─────────────────────────────────────────────── -->
+  <aside class="sidebar">
+
+    <!-- Form Card -->
+    <div class="card form-card">
+      <h2 class="card-title">➕ New Delivery Request</h2>
+
+      <m-form-ula
+        [label]="validationError ? 'Error' : successMessage ? 'Success' : ''"
+        [class]="validationError ? 'error' : successMessage ? 'success' : 'normal'"
+        [result]="validationError || successMessage"
+        (calculate)="onSubmit()">
+
+        <div class="field-group">
+          <label class="field-label">Customer Name</label>
+          <input
+            class="pure-input-1 field-input"
+            type="text"
+            placeholder="e.g. Ahmed Ali"
+            [(ngModel)]="customerName" />
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Package Weight (kg)</label>
+          <input
+            class="pure-input-1 field-input"
+            type="number"
+            min="0.1" max="50" step="0.1"
+            placeholder="e.g. 5.2"
+            [(ngModel)]="packageWeight" />
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Priority</label>
+          <select class="pure-input-1 field-input" [(ngModel)]="priority">
+            <option value="" disabled>Select priority…</option>
+            <option value="Standard">Standard</option>
+            <option value="Express">Express</option>
+            <option value="Urgent">Urgent</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Delivery Location</label>
+          <div class="location-chip" [class.has-location]="selectedLat !== null">
+            <ng-container *ngIf="selectedLat !== null; else noLoc">
+              📍 {{ selectedLat | number:'1.4-4' }}, {{ selectedLng | number:'1.4-4' }}
+            </ng-container>
+            <ng-template #noLoc>
+              <span class="no-loc-hint">Click on the map to pin a location</span>
+            </ng-template>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn pure-button pure-button-primary">
+          Save Delivery Request
+        </button>
+
+      </m-form-ula>
+    </div>
+
+    <!-- Table Card -->
+    <div class="card table-card">
+      <div class="table-header-row">
+        <h2 class="card-title">📦 All Deliveries</h2>
+        <m-search-button (search)="onSearch($event)"></m-search-button>
+      </div>
+
+      <div *ngIf="deliveries.length === 0" class="empty-state">
+        No deliveries yet. Add one using the form above.
+      </div>
+
+      <div *ngIf="deliveries.length > 0" class="table-scroll">
+        <!-- Custom table with nearest highlight -->
+        <table class="pure-table dispatch-table">
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Weight (kg)</th>
+              <th>Priority</th>
+              <th>Distance (km)</th>
+              <th>AI Instruction</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let d of deliveries"
+                [class.nearest-row]="isNearest(d)"
+                [class.urgent-row]="d.priority === 'Urgent'"
+                [class.express-row]="d.priority === 'Express'">
+              <td>{{ d.customerName }}</td>
+              <td>{{ d.packageWeight }}</td>
+              <td>
+                <span class="priority-badge" [ngClass]="'badge-' + d.priority.toLowerCase()">
+                  {{ d.priority }}
+                </span>
+              </td>
+              <td>{{ d.distance }}</td>
+              <td class="instruction-cell">
+                <span *ngIf="d.aiInstruction; else noInstr">{{ d.aiInstruction }}</span>
+                <ng-template #noInstr><em class="muted">Not generated</em></ng-template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="nearestDeliveryId" class="nearest-legend">
+        ⭐ Highlighted row = nearest pending delivery from warehouse
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ── RIGHT: Map ──────────────────────────────────────────────────────── -->
+  <main class="map-area">
+    <div class="map-legend">
+      <span class="legend-dot standard"></span> Standard
+      <span class="legend-dot express"></span>  Express
+      <span class="legend-dot urgent"></span>   Urgent
+      <span class="legend-dot warehouse"></span> Warehouse
+    </div>
+    <div #mapEl class="map-container"></div>
+    <p class="map-hint">Click anywhere on the map to set a delivery location</p>
+  </main>
+
+</div>

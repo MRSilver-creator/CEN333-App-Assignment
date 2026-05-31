@@ -1,0 +1,14 @@
+<div class="toast-panel">
+    <div class="toast-item" [ngClass]="type">
+        <div class="toast" [ngClass]="type">
+            <label class="close">
+            </label>
+            <h3 [ngClass]="type + '-text'">
+                <i *ngIf="type === 'warning'" class="fas fa-exclamation-triangle"></i>
+                <i *ngIf="type === 'error'" class="fas fa-times-circle"></i>
+                <i *ngIf="type === 'success'" class="fas fa-check-circle"></i>
+                {{ header || 'Alert' }}</h3>
+            <p><ng-content></ng-content></p>
+        </div>
+    </div>
+</div>

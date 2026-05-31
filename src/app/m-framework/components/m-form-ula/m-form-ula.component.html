@@ -1,0 +1,11 @@
+<m-result-box [label]="label" [class]="class" [value]="result">
+  {{ result }}</m-result-box>
+<div class="pure-u-1">
+  <form class="pure-form pure-form-stacked" (submit)="emitCalculateEvent(); $event.preventDefault();">
+      <fieldset>
+          <div class="pure-u-1-1">
+             <ng-content></ng-content>
+          </div>
+      </fieldset>
+  </form>
+</div>

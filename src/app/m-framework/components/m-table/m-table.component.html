@@ -1,0 +1,41 @@
+<table class="pure-table">
+  <caption *ngIf="showCaption">{{ caption }}</caption>
+  <thead class="pure-table-head">
+    <tr>
+      <ng-container *ngIf="columnsToBeDisplayed.length > 0; else defaultHeaders">
+        <th *ngFor="let key of columnsToBeDisplayed">{{ tableHeaders.length > 0 ? tableHeaders[columnsToBeDisplayed.indexOf(key)] : key }}</th>
+      </ng-container>
+
+      <ng-template #defaultHeaders>
+        <th *ngIf="isStringData">Value</th>
+        <ng-container *ngIf="!isStringData">
+          <th *ngFor="let key of getObjectKeys(data[0])">{{ tableHeaders.length > 0 ? tableHeaders[getObjectKeys(data[0]).indexOf(key)] : key }}</th>
+        </ng-container>
+      </ng-template>
+      <th *ngIf="showDeleteButton || showMoreDetails">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of data">
+      <ng-container *ngIf="columnsToBeDisplayed.length > 0; else defaultOrder">
+        <td *ngFor="let key of columnsToBeDisplayed">{{ item[key] ?? ''}}</td>
+      </ng-container>
+
+      <ng-template #defaultOrder>
+        <td *ngIf="isStringData">{{ item }}</td>
+        <ng-container *ngIf="!isStringData">
+          <td *ngFor="let key of getObjectKeys(item)">{{ item[key] }}</td>
+        </ng-container>
+      </ng-template>
+
+      <td class="action-button-col" *ngIf="showDeleteButton || showMoreDetails">
+        <button *ngIf="showDeleteButton" (click)="removeItem(item)" class="button">
+          <span>X</span>
+        </button>
+        <button *ngIf="showMoreDetails" (click)="showDetails(item)" class="button">
+          <span>&#8658;</span>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

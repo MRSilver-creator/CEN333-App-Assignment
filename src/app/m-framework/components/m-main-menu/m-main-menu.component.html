@@ -1,0 +1,7 @@
+<div class="pure-menu custom-restricted-width pure-u-1-1">
+    <ul class="pure-menu-list">
+        <li *ngFor="let menuitem of menuitems"  class="pure-menu-item">
+            <button class="pure-button pure-menu-link" (click)="routeToPage(menuitem)">{{menuitem}}</button>
+        </li>
+    </ul>
+</div>

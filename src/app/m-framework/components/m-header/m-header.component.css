@@ -1,0 +1,23 @@
+.logo-container {
+    position: fixed;
+    top: 10px; 
+    left: 10px; 
+  }
+  
+  /* Below the logo */
+  .logo-title {
+    display: inline-block; 
+    margin-top: 10px; 
+    text-align: center;
+    width: 100%;
+  }
+/* Next to the logo */
+  /* .logo-title {
+    display: inline-block; 
+    margin-top: 10px; 
+    margin-left: 30%;
+    margin-bottom: 5%;
+  }
+ */
+
+  
