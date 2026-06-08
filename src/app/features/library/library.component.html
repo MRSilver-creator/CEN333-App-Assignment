@@ -3,7 +3,9 @@
   <input type="text" [(ngModel)]="searchTerm" placeholder="Search by name or ingredient…" class="search-input" />
 </div>
 
-<p *ngIf="filtered.length === 0" class="empty-msg">No medications saved yet. <a routerLink="/identify">Identify one now →</a></p>
+<p *ngIf="filtered.length === 0" class="empty-msg">
+  No medications saved yet. <a routerLink="/identify">Identify one now →</a>
+</p>
 
 <div class="cards-grid">
   <div class="med-card" *ngFor="let med of filtered">
@@ -18,8 +20,11 @@
     </div>
 
     <div class="card-actions">
-      <button class="btn btn-outline" (click)="toggleExpand(med.id!)">{{ expandedId === med.id ? '▲ Hide' : '▼ Details' }}</button>
+      <button class="btn btn-outline" (click)="toggleExpand(med.id!)">
+        {{ expandedId === med.id ? '▲ Hide' : '▼ Details' }}
+      </button>
       <button class="btn btn-primary" (click)="logDose(med)">+ Log Dose</button>
+      <m-delete-button (onClick)="deleteMedication(med)"></m-delete-button>
     </div>
 
     <div class="card-details" *ngIf="expandedId === med.id">
@@ -33,7 +38,9 @@
       </div>
       <div class="detail-section">
         <span class="detail-label">Confidence</span>
-        <span class="badge" [ngClass]="med.analysis.confidenceLevel">{{ med.analysis.confidenceLevel | uppercase }}</span>
+        <span class="badge" [ngClass]="med.analysis.confidenceLevel">
+          {{ med.analysis.confidenceLevel | uppercase }}
+        </span>
       </div>
       <div class="detail-section">
         <span class="detail-label">Date Added</span>

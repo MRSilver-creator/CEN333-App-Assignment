@@ -13,7 +13,7 @@ h2 { font-size: 1.5rem; font-weight: 700; color: #e8eaf0; margin: 0; }
 .med-ing  { font-size: 0.8rem; color: #636880; margin-bottom: 0.2rem; }
 .med-dosage { font-size: 0.8rem; color: #8890a8; margin-bottom: 0.3rem; }
 .dose-count { font-size: 0.78rem; color: #7c8fff; }
-.card-actions { display: flex; gap: 0.7rem; margin-bottom: 0.8rem; }
+.card-actions { display: flex; gap: 0.7rem; margin-bottom: 0.8rem; align-items: center; flex-wrap: wrap; }
 .btn { padding: 0.5rem 1rem; border-radius: 6px; border: none; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
 .btn-primary { background: #7c8fff; color: #0f1117; } .btn-primary:hover { background: #9aaaff; }
 .btn-outline { background: transparent; color: #7c8fff; border: 1px solid #7c8fff; } .btn-outline:hover { background: #1e2238; }
