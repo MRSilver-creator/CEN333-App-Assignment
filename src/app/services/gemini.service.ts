@@ -1,67 +1,52 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environments';
+import { GeminiAnalysis } from '../models/medication.model';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class GeminiService {
+  private readonly API_URL =
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
-  private endpoint =
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+  constructor(private http: HttpClient) {}
 
-  async generateDeliveryInstruction(
-    customerName: string,
-    packageWeight: number,
-    priority: string,
-    distanceKm: number
-  ): Promise<string> {
-
-    const apiKey = environment.geminiApiKey?.trim();
-    if (!apiKey) {
-      throw new Error('Gemini API key is missing. Set geminiApiKey in environments.ts.');
-    }
-
-    const prompt =
-      `You are a professional courier dispatcher. Write exactly 2 sentences of courier-style ` +
-      `delivery instructions for the following delivery:\n` +
-      `- Customer: ${customerName}\n` +
-      `- Package Weight: ${packageWeight} kg\n` +
-      `- Priority: ${priority}\n` +
-      `- Distance from warehouse: ${distanceKm} km\n` +
-      `Be concise, specific, and professional. Include timing advice appropriate to the priority level.`;
-
-    const url = `${this.endpoint}?key=${encodeURIComponent(apiKey)}`;
+  async analyzeMedication(
+    imageBase64: string,
+    mimeType: string
+  ): Promise<GeminiAnalysis> {
+    const prompt = `You are a pharmaceutical information assistant.
+Analyze the provided medication image and return ONLY valid JSON matching this exact schema:
+{
+  "medicationName": string,
+  "activeIngredient": string,
+  "typicalAdultDosage": string,
+  "commonUses": [string, string, string],
+  "warnings": [string, string, string],
+  "confidenceLevel": "high" | "medium" | "low"
+}
+If you cannot identify the medication confidently, set confidenceLevel to "low".
+Return ONLY the JSON object, no markdown, no explanation.`;
 
     const body = {
-      contents: [{ parts: [{ text: prompt }] }]
+      contents: [{
+        parts: [
+          { text: prompt },
+          { inline_data: { mime_type: mimeType, data: imageBase64 } }
+        ]
+      }],
+      generationConfig: { response_mime_type: 'application/json' }
     };
 
-    let response: Response;
-    try {
-      response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-    } catch (e) {
-      throw new Error(`Network error calling Gemini API: ${e instanceof Error ? e.message : String(e)}`);
-    }
+    const res: any = await firstValueFrom(
+      this.http.post(
+        `${this.API_URL}?key=${environment.geminiApiKey}`,
+        body
+      )
+    );
 
-    const data = await response.json().catch(() => null);
-
-    // fetch does not throw on 4xx/5xx — surface the real API error instead of "no response".
-    if (!response.ok) {
-      const apiMessage = data?.error?.message;
-      throw new Error(
-        apiMessage
-          ? `Gemini API error (${response.status}): ${apiMessage}`
-          : `Gemini API error (${response.status} ${response.statusText}).`
-      );
-    }
-
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (typeof text !== 'string' || !text.trim()) {
-      throw new Error('Gemini API returned an unexpected response with no text content.');
-    }
-
-    return text;
+    const raw = res?.candidates?.[0]?.content?.parts?.[0]?.text ?? '{}';
+    const parsed: GeminiAnalysis = JSON.parse(raw);
+    return parsed;
   }
 }

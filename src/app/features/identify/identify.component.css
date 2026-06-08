@@ -1,0 +1,32 @@
+.page-card { background:#fff; border-radius:12px; padding:28px; max-width:760px; margin:0 auto; box-shadow:0 2px 12px rgba(0,0,0,.08); }
+h2 { margin:0 0 20px; color:#2c3e50; }
+h3 { color:#34495e; margin:0 0 12px; }
+.section { margin-bottom:24px; }
+.btn-row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.or-label { color:#999; font-size:.9rem; }
+.btn { padding:9px 18px; border:none; border-radius:7px; cursor:pointer; font-size:.9rem; font-weight:600; transition:opacity .2s; }
+.btn:disabled { opacity:.55; cursor:not-allowed; }
+.btn-primary   { background:#3498db; color:#fff; }
+.btn-secondary { background:#95a5a6; color:#fff; }
+.btn-success   { background:#27ae60; color:#fff; }
+.btn-danger    { background:#e74c3c; color:#fff; }
+.btn-large     { padding:12px 28px; font-size:1rem; }
+.file-label { display:inline-block; }
+.camera-box { margin-top:12px; }
+.video-preview { width:100%; max-width:480px; border-radius:8px; border:2px solid #3498db; }
+.mt-8 { margin-top:8px; }
+.preview-box { margin-top:12px; }
+.preview-img { max-width:320px; border-radius:8px; border:2px solid #ccc; display:block; }
+.text-input { width:100%; max-width:400px; padding:9px 12px; border:1px solid #ddd; border-radius:7px; font-size:.95rem; box-sizing:border-box; }
+.result-panel { background:#f8f9fa; border:1px solid #dee2e6; border-radius:10px; padding:20px; }
+.result-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+.result-item { background:#fff; border-radius:7px; padding:12px; border:1px solid #e9ecef; }
+.result-item.full { grid-column:1/-1; }
+.label { display:block; font-size:.78rem; color:#6c757d; text-transform:uppercase; font-weight:700; margin-bottom:4px; }
+.value { font-size:.97rem; color:#2c3e50; font-weight:600; }
+.confidence.high   { color:#27ae60; }
+.confidence.medium { color:#f39c12; }
+.confidence.low    { color:#e74c3c; }
+.result-item ul { margin:4px 0 0 18px; padding:0; color:#2c3e50; font-size:.9rem; }
+.error-banner   { background:#fde8e8; border:1px solid #f5c6cb; color:#721c24; padding:10px 16px; border-radius:7px; margin-bottom:16px; }
+.success-banner { background:#d4edda; border:1px solid #c3e6cb; color:#155724; padding:10px 16px; border-radius:7px; margin-bottom:16px; }

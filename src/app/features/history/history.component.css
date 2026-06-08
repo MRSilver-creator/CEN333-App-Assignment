@@ -1,0 +1,12 @@
+.page-card { background:#fff; border-radius:12px; padding:28px; max-width:900px; margin:0 auto; box-shadow:0 2px 12px rgba(0,0,0,.08); }
+h2 { margin:0 0 20px; color:#2c3e50; }
+.chart-section { margin-bottom:24px; border:1px solid #e9ecef; border-radius:10px; overflow:hidden; padding:12px; }
+.search-row { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.search-input { flex:1; max-width:380px; padding:9px 14px; border:1px solid #ddd; border-radius:7px; font-size:.95rem; }
+.count-badge { background:#3498db; color:#fff; border-radius:20px; padding:4px 12px; font-size:.85rem; }
+.empty-state { text-align:center; color:#888; padding:32px; }
+.history-table { width:100%; border-collapse:collapse; font-size:.9rem; }
+.history-table th { background:#2c3e50; color:#fff; padding:11px 14px; text-align:left; }
+.history-table td { padding:10px 14px; border-bottom:1px solid #e9ecef; color:#333; }
+.history-table tr:hover td { background:#f8f9fa; }
+.highlight-row td { background:#d4edda !important; font-weight:600; }

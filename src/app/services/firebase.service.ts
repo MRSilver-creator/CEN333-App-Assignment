@@ -1,75 +1,53 @@
 import { Injectable } from '@angular/core';
-import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, push, onValue, update, remove } from 'firebase/database';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { environment } from '../../environments/environments';
-
-export interface DeliveryRequest {
-  id?: string;
-  customerName: string;
-  packageWeight: number;
-  priority: 'Standard' | 'Express' | 'Urgent';
-  lat: number;
-  lng: number;
-  distance: number;           // km, Haversine from warehouse
-  timestamp: string;
-  status: 'pending' | 'delivered';
-  aiInstruction?: string;
-}
+import {
+  getDatabase, ref, push, set, onValue, off, DatabaseReference
+} from 'firebase/database';
+import { Observable } from 'rxjs';
+import { Medication, DoseLog } from '../models/medication.model';
 
 @Injectable({ providedIn: 'root' })
 export class FirebaseService {
+  private db = getDatabase();
 
-  private db: any = null;
-
-  private _deliveries$ = new BehaviorSubject<DeliveryRequest[]>([]);
-  deliveries$: Observable<DeliveryRequest[]> = this._deliveries$.asObservable();
-
-  constructor() {
-    // Initializing the Realtime Database with an empty/invalid databaseURL
-    // throws a FATAL error. That would happen during DI when DispatchComponent
-    // is constructed, aborting the route render and leaving a blank page.
-    // Guard initialization so an unconfigured Firebase degrades to an empty
-    // delivery list instead of crashing the app.
-    if (!environment.firebaseConfig?.databaseURL) {
-      console.warn('FirebaseService: firebaseConfig.databaseURL is not set — running without realtime data.');
-      return;
-    }
-
-    try {
-      const app = initializeApp(environment.firebaseConfig);
-      this.db = getDatabase(app);
-
-      // Real-time listener
-      onValue(ref(this.db, 'deliveries'), (snapshot) => {
-        const data = snapshot.val();
-        const list: DeliveryRequest[] = data
-          ? Object.keys(data).map(k => ({ status: 'pending', id: k, ...data[k] }))
-          : [];
-        this._deliveries$.next(list);
-      });
-    } catch (e) {
-      console.error('FirebaseService: failed to initialize Firebase.', e);
-      this.db = null;
-    }
+  // ─── Medications ───────────────────────────────────────────────
+  saveMedication(med: Omit<Medication, 'id'>): Promise<string> {
+    const listRef = ref(this.db, 'medications');
+    const newRef  = push(listRef);
+    return set(newRef, med).then(() => newRef.key!);
   }
 
-  saveDelivery(delivery: Omit<DeliveryRequest, 'id'>): Promise<string> {
-    if (!this.db) return Promise.reject(new Error('Firebase is not configured.'));
-    return push(ref(this.db, 'deliveries'), delivery).then(r => r.key ?? '');
+  getMedications(): Observable<Medication[]> {
+    return new Observable(observer => {
+      const r = ref(this.db, 'medications');
+      const handler = onValue(r, snap => {
+        const val = snap.val() || {};
+        const list: Medication[] = Object.entries(val).map(([id, v]) => ({
+          ...(v as Omit<Medication, 'id'>), id
+        }));
+        observer.next(list);
+      }, err => observer.error(err));
+      return () => off(r);
+    });
   }
 
-  updateDelivery(id: string, changes: Partial<DeliveryRequest>): Promise<void> {
-    if (!this.db) return Promise.reject(new Error('Firebase is not configured.'));
-    return update(ref(this.db, `deliveries/${id}`), changes as any);
+  // ─── Doses ─────────────────────────────────────────────────────
+  saveDose(dose: Omit<DoseLog, 'id'>): Promise<string> {
+    const listRef = ref(this.db, 'doses');
+    const newRef  = push(listRef);
+    return set(newRef, dose).then(() => newRef.key!);
   }
 
-  deleteDelivery(id: string): Promise<void> {
-    if (!this.db) return Promise.reject(new Error('Firebase is not configured.'));
-    return remove(ref(this.db, 'deliveries/' + id));
-  }
-
-  getDeliveries(): DeliveryRequest[] {
-    return this._deliveries$.getValue();
+  getDoses(): Observable<DoseLog[]> {
+    return new Observable(observer => {
+      const r = ref(this.db, 'doses');
+      const handler = onValue(r, snap => {
+        const val = snap.val() || {};
+        const list: DoseLog[] = Object.entries(val).map(([id, v]) => ({
+          ...(v as Omit<DoseLog, 'id'>), id
+        }));
+        observer.next(list);
+      }, err => observer.error(err));
+      return () => off(r);
+    });
   }
 }

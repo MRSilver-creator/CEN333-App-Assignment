@@ -1,0 +1,52 @@
+<div class="page-card">
+  <h2>📚 Medication Library</h2>
+
+  <div class="search-row">
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      placeholder="🔍 Search by name or ingredient…"
+      class="search-input"
+    />
+    <span class="count-badge">{{ filtered.length }} medication(s)</span>
+  </div>
+
+  <div *ngIf="filtered.length === 0" class="empty-state">
+    No medications found. <a routerLink="/">Identify one now →</a>
+  </div>
+
+  <div class="card-grid">
+    <div class="med-card" *ngFor="let med of filtered">
+      <div class="card-img-wrap">
+        <img
+          *ngIf="med.imageBase64"
+          [src]="'data:' + med.imageMimeType + ';base64,' + med.imageBase64"
+          alt="Medication thumbnail"
+          class="thumb"
+        />
+        <div *ngIf="!med.imageBase64" class="thumb-placeholder">💊</div>
+      </div>
+
+      <div class="card-body">
+        <div class="card-name">{{ displayName(med) }}</div>
+        <div class="card-sub">{{ med.analysis.activeIngredient }}</div>
+        <div class="card-meta">🗓 {{ med.dateAdded | date:'mediumDate' }}</div>
+        <div class="dose-badge">💉 {{ doseCount(med.id!) }} dose(s) logged</div>
+
+        <div class="card-actions">
+          <a [routerLink]="['/log']" [queryParams]="{medId: med.id}" class="btn btn-success">📝 Log Dose</a>
+          <button class="btn btn-secondary" (click)="toggleDetails(med.id!)">🔍 View Details</button>
+        </div>
+
+        <div class="details-panel" *ngIf="expandedId === med.id">
+          <div class="detail-row"><span>Dosage:</span> {{ med.analysis.typicalAdultDosage }}</div>
+          <div class="detail-row"><span>Uses:</span> {{ med.analysis.commonUses?.join(', ') }}</div>
+          <div class="detail-row"><span>Warnings:</span> {{ med.analysis.warnings?.join(', ') }}</div>
+          <div class="detail-row"><span>Confidence:</span>
+            <span class="confidence" [ngClass]="med.analysis.confidenceLevel">{{ med.analysis.confidenceLevel | uppercase }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+.page-card { background:#fff; border-radius:12px; padding:28px; max-width:540px; margin:0 auto; box-shadow:0 2px 12px rgba(0,0,0,.08); }
+h2 { margin:0 0 22px; color:#2c3e50; }
+.form-group { margin-bottom:18px; display:flex; flex-direction:column; gap:6px; }
+label { font-size:.88rem; font-weight:700; color:#34495e; }
+.form-control { padding:9px 12px; border:1px solid #ddd; border-radius:7px; font-size:.95rem; width:100%; box-sizing:border-box; }
+textarea.form-control { resize:vertical; }
+.med-preview { display:flex; align-items:center; gap:12px; background:#f8f9fa; border-radius:8px; padding:10px; }
+.mini-thumb  { width:56px; height:56px; object-fit:cover; border-radius:6px; border:1px solid #ddd; }
+.btn { padding:10px 22px; border:none; border-radius:7px; cursor:pointer; font-size:.95rem; font-weight:600; }
+.btn:disabled { opacity:.55; cursor:not-allowed; }
+.btn-success { background:#27ae60; color:#fff; }
+.btn-large   { padding:12px 28px; font-size:1rem; }
+.error-banner   { background:#fde8e8; border:1px solid #f5c6cb; color:#721c24; padding:10px 16px; border-radius:7px; margin-bottom:16px; }
+.success-banner { background:#d4edda; border:1px solid #c3e6cb; color:#155724; padding:10px 16px; border-radius:7px; margin-bottom:16px; }

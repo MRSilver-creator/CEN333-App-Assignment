@@ -1,0 +1,45 @@
+<div class="page-card">
+  <h2>✏️ Log a Dose</h2>
+
+  <div *ngIf="errorMsg"    class="error-banner">{{ errorMsg }}</div>
+  <div *ngIf="saveSuccess" class="success-banner">✅ Dose logged! Redirecting…</div>
+
+  <div class="form-group">
+    <label>Medication *</label>
+    <select [(ngModel)]="selectedMedId" class="form-control">
+      <option value="">— Select a medication —</option>
+      <option *ngFor="let m of medications" [value]="m.id">{{ displayName(m) }}</option>
+    </select>
+  </div>
+
+  <div class="form-group" *ngIf="selectedMed">
+    <div class="med-preview">
+      <img
+        *ngIf="selectedMed.imageBase64"
+        [src]="'data:' + selectedMed.imageMimeType + ';base64,' + selectedMed.imageBase64"
+        class="mini-thumb"
+        alt="Medication"
+      />
+      <div>
+        <strong>{{ selectedMed.analysis.medicationName }}</strong><br />
+        <small>{{ selectedMed.analysis.activeIngredient }}</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Date &amp; Time Taken *</label>
+    <input type="datetime-local" [(ngModel)]="dateTaken" class="form-control" />
+  </div>
+
+  <div class="form-group">
+    <label>Notes (optional)</label>
+    <textarea [(ngModel)]="notes" class="form-control" rows="3"
+      placeholder="e.g. taken with food, felt drowsy after…"></textarea>
+  </div>
+
+  <button class="btn btn-success btn-large" (click)="save()" [disabled]="saving || saveSuccess">
+    <span *ngIf="!saving">💾 Log Dose</span>
+    <span *ngIf="saving">Saving…</span>
+  </button>
+</div>

@@ -1,0 +1,95 @@
+<div class="page-card">
+  <h2>📷 Identify Medication</h2>
+
+  <!-- Error -->
+  <div *ngIf="errorMsg" class="error-banner">{{ errorMsg }}</div>
+  <div *ngIf="saveSuccess" class="success-banner">✅ Saved! Redirecting to library…</div>
+
+  <!-- Camera Section -->
+  <div class="section">
+    <h3>Step 1 — Provide Image</h3>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" (click)="startCamera()" [disabled]="cameraActive">📹 Open Camera</button>
+      <span class="or-label">or</span>
+      <label class="btn btn-secondary file-label">
+        📁 Upload Image
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+      </label>
+    </div>
+
+    <!-- Live camera preview -->
+    <div *ngIf="cameraActive" class="camera-box">
+      <video #videoEl autoplay playsinline class="video-preview"></video>
+      <canvas #canvasEl hidden></canvas>
+      <div class="btn-row mt-8">
+        <button class="btn btn-success" (click)="takePhoto()">📸 Take Photo</button>
+        <button class="btn btn-danger"  (click)="stopCamera()">✖ Cancel</button>
+      </div>
+    </div>
+
+    <!-- Hidden canvas for file path too -->
+    <canvas *ngIf="!cameraActive" #canvasEl hidden></canvas>
+
+    <!-- Image preview -->
+    <div *ngIf="previewUrl" class="preview-box">
+      <img [src]="previewUrl" alt="Captured medication" class="preview-img" />
+      <button class="btn btn-secondary mt-8" (click)="reset()">🔄 Reset</button>
+    </div>
+  </div>
+
+  <!-- Optional Nickname -->
+  <div class="section" *ngIf="previewUrl && !saveSuccess">
+    <h3>Step 2 — Optional Nickname</h3>
+    <input
+      type="text"
+      [(ngModel)]="nickname"
+      placeholder="e.g. morning blood pressure pill"
+      class="text-input"
+    />
+  </div>
+
+  <!-- Analyze Button -->
+  <div class="section" *ngIf="previewUrl && !saveSuccess">
+    <button
+      class="btn btn-primary btn-large"
+      (click)="analyze()"
+      [disabled]="analyzing"
+    >
+      <span *ngIf="!analyzing">🔍 Analyze with Gemini AI</span>
+      <span *ngIf="analyzing">⏳ Analyzing…</span>
+    </button>
+  </div>
+
+  <!-- Gemini Result Panel -->
+  <div class="section result-panel" *ngIf="analysisResult">
+    <h3>🤖 Gemini Analysis Result</h3>
+    <div class="result-grid">
+      <div class="result-item"><span class="label">Medication Name</span><span class="value">{{ analysisResult.medicationName }}</span></div>
+      <div class="result-item"><span class="label">Active Ingredient</span><span class="value">{{ analysisResult.activeIngredient }}</span></div>
+      <div class="result-item"><span class="label">Typical Dosage</span><span class="value">{{ analysisResult.typicalAdultDosage }}</span></div>
+      <div class="result-item"><span class="label">Confidence</span>
+        <span class="value confidence" [ngClass]="analysisResult.confidenceLevel">
+          {{ analysisResult.confidenceLevel | uppercase }}
+        </span>
+      </div>
+      <div class="result-item full">
+        <span class="label">Common Uses</span>
+        <ul><li *ngFor="let u of analysisResult.commonUses">{{ u }}</li></ul>
+      </div>
+      <div class="result-item full">
+        <span class="label">Warnings / Side Effects</span>
+        <ul><li *ngFor="let w of analysisResult.warnings">{{ w }}</li></ul>
+      </div>
+    </div>
+
+    <button
+      class="btn btn-success btn-large"
+      (click)="saveToLibrary()"
+      [disabled]="saving"
+    >
+      <span *ngIf="!saving">💾 Save to Library</span>
+      <span *ngIf="saving">Saving…</span>
+    </button>
+  </div>
+</div>

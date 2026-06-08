@@ -1,9 +1,14 @@
 import { Routes } from '@angular/router';
-import { HomeComponent }     from './features/home/home.component';
-import { DispatchComponent } from './features/dispatch/dispatch.component';
+import { IdentifyComponent }  from './features/identify/identify.component';
+import { LibraryComponent }   from './features/library/library.component';
+import { LogDoseComponent }   from './features/log-dose/log-dose.component';
+import { HistoryComponent }   from './features/history/history.component';
 
 export const routes: Routes = [
-  { path: '',         component: HomeComponent },
-  { path: 'home',     component: HomeComponent },
-  { path: 'dispatch', component: DispatchComponent },
+  { path: '',         component: IdentifyComponent },
+  { path: 'identify', component: IdentifyComponent },
+  { path: 'library',  component: LibraryComponent },
+  { path: 'log',      component: LogDoseComponent },
+  { path: 'history',  component: HistoryComponent },
+  { path: '**',       redirectTo: '' },
 ];
