@@ -12,5 +12,5 @@ import { MHeaderComponent } from './m-framework/components/m-header/m-header.com
 })
 export class AppComponent {
   titleName = 'PillSnap';
-  navFeatures = ['Identify', 'Library', 'History'];
+  navFeatures = ['Identify', 'Library', 'Log-Dose', 'History'];
 }

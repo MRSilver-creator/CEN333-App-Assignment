@@ -1,12 +1,18 @@
+:host {
+  display: block;
+  background: #f4f6f8;
+  min-height: 100vh;
+}
+
 .app-page-content {
   min-height: 100vh;
   background: #f4f6f8;
-  padding: 90px 24px 32px;
+  padding: 88px 24px 32px;
 }
 
 .disclaimer-banner {
   max-width: 1000px;
-  margin: 12px auto 18px;
+  margin: 0 auto 18px;
   background: #c62828;
   color: #fff;
   border: 1px solid #8e0000;
