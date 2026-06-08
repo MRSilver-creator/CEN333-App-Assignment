@@ -6,9 +6,8 @@ import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class GeminiService {
-  // Updated to gemini-2.0-flash (1.5-flash is deprecated for new keys)
   private readonly API_URL =
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
   constructor(private http: HttpClient) {}
 
@@ -45,7 +44,6 @@ Return ONLY the JSON object, no markdown, no explanation.`;
         this.http.post(`${this.API_URL}?key=${environment.geminiApiKey}`, body)
       );
     } catch (err) {
-      // Log the actual HTTP error to console so you can see exactly what went wrong
       const httpErr = err as HttpErrorResponse;
       console.error('Gemini HTTP error:', httpErr.status, httpErr.statusText);
       console.error('Gemini error body:', httpErr.error);
