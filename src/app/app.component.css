@@ -34,11 +34,10 @@
   padding: 8px 14px;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.08);
-  transition: background 0.2s ease;
 }
 
-.top-nav a:hover,
-.top-nav a.active {
+.top-nav a.active,
+.top-nav a:hover {
   background: rgba(255, 255, 255, 0.22);
 }
 

@@ -1,13 +1,14 @@
-<div class="top-shell">
+<header class="top-shell">
   <div class="brand">💊 PillSnap</div>
 
   <nav class="top-nav">
-    <a routerLink="/identify" routerLinkActive="active">Identify</a>
-    <a routerLink="/library" routerLinkActive="active">Library</a>
-    <a routerLink="/log-dose" routerLinkActive="active">Log Dose</a>
-    <a routerLink="/history" routerLinkActive="active">History</a>
+    <a [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a [routerLink]="['/identify']" routerLinkActive="active">Identify</a>
+    <a [routerLink]="['/library']" routerLinkActive="active">Library</a>
+    <a [routerLink]="['/log-dose']" routerLinkActive="active">Log Dose</a>
+    <a [routerLink]="['/history']" routerLinkActive="active">History</a>
   </nav>
-</div>
+</header>
 
 <div class="app-page-content">
   <div class="disclaimer-banner">

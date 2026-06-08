@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
-import { IdentifyComponent } from './features/identify/identify.component';
-import { LibraryComponent } from './features/library/library.component';
-import { LogDoseComponent } from './features/log-dose/log-dose.component';
-import { HistoryComponent } from './features/history/history.component';
+
+@Component({
+  standalone: true,
+  selector: 'app-test',
+  template: `<div style="padding: 2rem; font-size: 1.4rem;">TEST ROUTE WORKS</div>`,
+})
+export class TestComponent {}
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'identify', pathMatch: 'full' },
-  { path: 'identify', component: IdentifyComponent },
-  { path: 'library', component: LibraryComponent },
-  { path: 'log-dose', component: LogDoseComponent },
-  { path: 'history', component: HistoryComponent },
+  { path: '', component: TestComponent },
+  { path: 'identify', component: TestComponent },
 ];
