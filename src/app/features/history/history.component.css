@@ -1,64 +1,17 @@
-.page-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 28px;
-  max-width: 900px;
-  margin: 0 auto;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-}
-
-h2 {
-  margin: 0 0 20px;
-  color: #2c3e50;
-}
-
-.chart-section {
-  margin-bottom: 24px;
-  border: 1px solid #e9ecef;
-  border-radius: 10px;
-  overflow: hidden;
-  padding: 12px;
-  background: #fff;
-}
-
-.search-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.search-input {
-  flex: 1;
-  max-width: 380px;
-  padding: 9px 14px;
-  border: 1px solid #ddd;
-  border-radius: 7px;
-  font-size: 0.95rem;
-}
-
-.count-badge {
-  background: #3498db;
-  color: #fff;
-  border-radius: 20px;
-  padding: 4px 12px;
-  font-size: 0.85rem;
-}
-
-.empty-state {
-  text-align: center;
-  color: #888;
-  padding: 32px;
-}
-
-.table-wrap {
-  background: #fff;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.legend {
-  margin-top: 10px;
-  color: #6c757d;
-  font-size: 0.85rem;
-}
+.page-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.8rem; }
+h2 { font-size: 1.5rem; font-weight: 700; color: #e8eaf0; margin: 0; }
+.search-input { background: #161820; border: 1px solid #2a2d3a; color: #e8eaf0; border-radius: 7px; padding: 0.6rem 1rem; font-size: 0.9rem; min-width: 240px; }
+.search-input:focus { outline: none; border-color: #7c8fff; }
+.chart-box { background: #161820; border: 1px solid #2a2d3a; border-radius: 10px; padding: 1rem; margin-bottom: 2rem; overflow: hidden; }
+.empty-msg { color: #636880; text-align: center; margin-top: 2rem; }
+.table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid #2a2d3a; }
+.hist-table { width: 100%; border-collapse: collapse; }
+.hist-table thead th { background: #1a1d28; color: #636880; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.9rem 1rem; text-align: left; border-bottom: 1px solid #2a2d3a; }
+.hist-table tbody tr { border-bottom: 1px solid #1e2238; transition: background 0.15s; }
+.hist-table tbody tr:hover { background: #1a1d28; }
+.hist-table tbody tr.highlight { background: #1c2240; border-left: 3px solid #7c8fff; }
+.hist-table td { padding: 0.85rem 1rem; font-size: 0.88rem; color: #8890a8; vertical-align: middle; }
+.med-cell { display: flex; align-items: center; gap: 0.7rem; color: #e8eaf0; font-weight: 600; }
+.thumb { width: 36px; height: 36px; border-radius: 5px; object-fit: cover; flex-shrink: 0; }
+.date-cell { white-space: nowrap; color: #636880; }
+.notes-cell { max-width: 280px; }

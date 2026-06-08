@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
-  getDatabase, ref, push, set, onValue, off, DatabaseReference
+  getDatabase, ref, push, set, onValue, off
 } from 'firebase/database';
 import { Observable } from 'rxjs';
 import { Medication, DoseLog } from '../models/medication.model';
@@ -9,7 +9,7 @@ import { Medication, DoseLog } from '../models/medication.model';
 export class FirebaseService {
   private db = getDatabase();
 
-  // ─── Medications ───────────────────────────────────────────────
+  // ── Medications ────────────────────────────────────────────────
   saveMedication(med: Omit<Medication, 'id'>): Promise<string> {
     const listRef = ref(this.db, 'medications');
     const newRef  = push(listRef);
@@ -19,18 +19,21 @@ export class FirebaseService {
   getMedications(): Observable<Medication[]> {
     return new Observable(observer => {
       const r = ref(this.db, 'medications');
-      const handler = onValue(r, snap => {
-        const val = snap.val() || {};
-        const list: Medication[] = Object.entries(val).map(([id, v]) => ({
-          ...(v as Omit<Medication, 'id'>), id
-        }));
-        observer.next(list);
-      }, err => observer.error(err));
+      onValue(r,
+        snap => {
+          const val = snap.val() || {};
+          const list: Medication[] = Object.entries(val).map(([id, v]) => ({
+            ...(v as Omit<Medication, 'id'>), id
+          }));
+          observer.next(list);
+        },
+        err => observer.error(err)
+      );
       return () => off(r);
     });
   }
 
-  // ─── Doses ─────────────────────────────────────────────────────
+  // ── Doses ───────────────────────────────────────────────────────
   saveDose(dose: Omit<DoseLog, 'id'>): Promise<string> {
     const listRef = ref(this.db, 'doses');
     const newRef  = push(listRef);
@@ -40,13 +43,16 @@ export class FirebaseService {
   getDoses(): Observable<DoseLog[]> {
     return new Observable(observer => {
       const r = ref(this.db, 'doses');
-      const handler = onValue(r, snap => {
-        const val = snap.val() || {};
-        const list: DoseLog[] = Object.entries(val).map(([id, v]) => ({
-          ...(v as Omit<DoseLog, 'id'>), id
-        }));
-        observer.next(list);
-      }, err => observer.error(err));
+      onValue(r,
+        snap => {
+          const val = snap.val() || {};
+          const list: DoseLog[] = Object.entries(val).map(([id, v]) => ({
+            ...(v as Omit<DoseLog, 'id'>), id
+          }));
+          observer.next(list);
+        },
+        err => observer.error(err)
+      );
       return () => off(r);
     });
   }

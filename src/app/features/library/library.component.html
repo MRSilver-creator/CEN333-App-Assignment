@@ -1,51 +1,43 @@
-<div class="page-card">
+<div class="page-header">
   <h2>📚 Medication Library</h2>
+  <input type="text" [(ngModel)]="searchTerm" placeholder="Search by name or ingredient…" class="search-input" />
+</div>
 
-  <div class="search-row">
-    <input
-      type="text"
-      [(ngModel)]="searchQuery"
-      placeholder="🔍 Search by name or ingredient…"
-      class="search-input"
-    />
-    <span class="count-badge">{{ filtered.length }} medication(s)</span>
-  </div>
+<p *ngIf="filtered.length === 0" class="empty-msg">No medications saved yet. <a routerLink="/identify">Identify one now →</a></p>
 
-  <div *ngIf="filtered.length === 0" class="empty-state">
-    No medications found. <a routerLink="/">Identify one now →</a>
-  </div>
-
-  <div class="card-grid">
-    <div class="med-card" *ngFor="let med of filtered">
-      <div class="card-img-wrap">
-        <img
-          *ngIf="med.imageBase64"
-          [src]="'data:' + med.imageMimeType + ';base64,' + med.imageBase64"
-          alt="Medication thumbnail"
-          class="thumb"
-        />
-        <div *ngIf="!med.imageBase64" class="thumb-placeholder">💊</div>
+<div class="cards-grid">
+  <div class="med-card" *ngFor="let med of filtered">
+    <div class="card-top">
+      <img [src]="'data:' + med.imageMimeType + ';base64,' + med.imageBase64" alt="medication" class="thumb" />
+      <div class="card-info">
+        <div class="med-name">{{ displayName(med) }}</div>
+        <div class="med-ing">{{ med.analysis.activeIngredient }}</div>
+        <div class="med-dosage">{{ med.analysis.typicalAdultDosage }}</div>
+        <div class="dose-count">💊 Logged {{ doseCount(med.id!) }} time(s)</div>
       </div>
+    </div>
 
-      <div class="card-body">
-        <div class="card-name">{{ displayName(med) }}</div>
-        <div class="card-sub">{{ med.analysis.activeIngredient }}</div>
-        <div class="card-meta">🗓 {{ med.dateAdded | date:'mediumDate' }}</div>
-        <div class="dose-badge">💉 {{ doseCount(med.id!) }} dose(s) logged</div>
+    <div class="card-actions">
+      <button class="btn btn-outline" (click)="toggleExpand(med.id!)">{{ expandedId === med.id ? '▲ Hide' : '▼ Details' }}</button>
+      <button class="btn btn-primary" (click)="logDose(med)">+ Log Dose</button>
+    </div>
 
-        <div class="card-actions">
-          <a [routerLink]="['/log']" [queryParams]="{medId: med.id}" class="btn btn-success">📝 Log Dose</a>
-          <button class="btn btn-secondary" (click)="toggleDetails(med.id!)">🔍 View Details</button>
-        </div>
-
-        <div class="details-panel" *ngIf="expandedId === med.id">
-          <div class="detail-row"><span>Dosage:</span> {{ med.analysis.typicalAdultDosage }}</div>
-          <div class="detail-row"><span>Uses:</span> {{ med.analysis.commonUses.join(', ') }}</div>
-          <div class="detail-row"><span>Warnings:</span> {{ med.analysis.warnings.join(', ') }}</div>
-          <div class="detail-row"><span>Confidence:</span>
-            <span class="confidence" [ngClass]="med.analysis.confidenceLevel">{{ med.analysis.confidenceLevel | uppercase }}</span>
-          </div>
-        </div>
+    <div class="card-details" *ngIf="expandedId === med.id">
+      <div class="detail-section">
+        <span class="detail-label">Common Uses</span>
+        <ul><li *ngFor="let u of med.analysis.commonUses">{{ u }}</li></ul>
+      </div>
+      <div class="detail-section">
+        <span class="detail-label">Warnings</span>
+        <ul><li *ngFor="let w of med.analysis.warnings">{{ w }}</li></ul>
+      </div>
+      <div class="detail-section">
+        <span class="detail-label">Confidence</span>
+        <span class="badge" [ngClass]="med.analysis.confidenceLevel">{{ med.analysis.confidenceLevel | uppercase }}</span>
+      </div>
+      <div class="detail-section">
+        <span class="detail-label">Date Added</span>
+        <span class="detail-val">{{ med.dateAdded | date:'medium' }}</span>
       </div>
     </div>
   </div>

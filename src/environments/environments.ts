@@ -11,7 +11,5 @@ export const environment = {
     appId:             '',
   },
 
-  googleMapsApiKey: '',
-
   geminiApiKey: '',
 };

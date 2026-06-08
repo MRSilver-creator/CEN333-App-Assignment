@@ -39,14 +39,10 @@ Return ONLY the JSON object, no markdown, no explanation.`;
     };
 
     const res: any = await firstValueFrom(
-      this.http.post(
-        `${this.API_URL}?key=${environment.geminiApiKey}`,
-        body
-      )
+      this.http.post(`${this.API_URL}?key=${environment.geminiApiKey}`, body)
     );
 
     const raw = res?.candidates?.[0]?.content?.parts?.[0]?.text ?? '{}';
-    const parsed: GeminiAnalysis = JSON.parse(raw);
-    return parsed;
+    return JSON.parse(raw) as GeminiAnalysis;
   }
 }

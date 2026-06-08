@@ -1,18 +1,17 @@
 <div class="page-card">
   <h2>📷 Identify Medication</h2>
+  <p class="page-sub">Take a photo or upload an image — Gemini AI will analyse it for you.</p>
 
-  <div *ngIf="errorMsg" class="error-banner">{{ errorMsg }}</div>
-  <div *ngIf="saveSuccess" class="success-banner">✅ Saved! Redirecting to library…</div>
+  <div *ngIf="errorMsg"    class="banner banner-error">{{ errorMsg }}</div>
+  <div *ngIf="saveSuccess" class="banner banner-success">✅ Saved! Redirecting to library…</div>
 
-  <div class="section">
+  <!-- Step 1 -->
+  <section class="step">
     <h3>Step 1 — Provide Image</h3>
-
     <div class="btn-row">
-      <button class="btn btn-primary" (click)="startCamera()" [disabled]="cameraActive">
-        📹 Open Camera
-      </button>
-      <span class="or-label">or</span>
-      <label class="btn btn-secondary file-label">
+      <button class="btn btn-primary" (click)="startCamera()" [disabled]="cameraActive">📹 Open Camera</button>
+      <span class="or">or</span>
+      <label class="btn btn-secondary">
         📁 Upload Image
         <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
       </label>
@@ -21,42 +20,40 @@
     <div *ngIf="cameraActive" class="camera-box">
       <video #videoEl autoplay playsinline class="video-preview"></video>
       <canvas #canvasEl hidden></canvas>
-      <div class="btn-row mt-8">
+      <div class="btn-row mt">
         <button class="btn btn-success" (click)="takePhoto()">📸 Take Photo</button>
-        <button class="btn btn-danger" (click)="stopCamera()">✖ Cancel</button>
+        <button class="btn btn-danger"  (click)="stopCamera()">✖ Cancel</button>
       </div>
     </div>
-
     <canvas *ngIf="!cameraActive" #canvasEl hidden></canvas>
 
     <div *ngIf="previewUrl" class="preview-box">
       <img [src]="previewUrl" alt="Captured medication" class="preview-img" />
-      <button class="btn btn-secondary mt-8" (click)="reset()">🔄 Reset</button>
+      <button class="btn btn-secondary mt" (click)="reset()">🔄 Reset</button>
     </div>
-  </div>
+  </section>
 
-  <div class="section" *ngIf="previewUrl && !saveSuccess">
-    <h3>Step 2 — Optional Nickname</h3>
-    <input
-      type="text"
-      [(ngModel)]="nickname"
-      placeholder="e.g. morning blood pressure pill"
-      class="text-input"
-    />
-  </div>
+  <!-- Step 2 -->
+  <section class="step" *ngIf="previewUrl && !saveSuccess">
+    <h3>Step 2 — Nickname (optional)</h3>
+    <input type="text" [(ngModel)]="nickname" placeholder="e.g. morning blood pressure pill" class="text-input" />
+  </section>
 
-  <div class="section" *ngIf="previewUrl && !saveSuccess">
+  <!-- Step 3 -->
+  <section class="step" *ngIf="previewUrl && !saveSuccess">
+    <h3>Step 3 — Analyse</h3>
     <button class="btn btn-primary btn-large" (click)="analyze()" [disabled]="analyzing">
       <span *ngIf="!analyzing">🔍 Analyze with Gemini AI</span>
-      <span *ngIf="analyzing">⏳ Analyzing…</span>
+      <span *ngIf="analyzing">⏳ Analysing…</span>
     </button>
-  </div>
+  </section>
 
-  <div class="section result-panel" *ngIf="analysisResult">
-    <h3>🤖 Gemini Analysis Result</h3>
+  <!-- Result -->
+  <section class="step result-panel" *ngIf="analysisResult">
+    <h3>🤖 Gemini Analysis</h3>
     <div class="result-grid">
       <div class="result-item">
-        <span class="label">Medication Name</span>
+        <span class="label">Medication</span>
         <span class="value">{{ analysisResult.medicationName }}</span>
       </div>
       <div class="result-item">
@@ -69,7 +66,7 @@
       </div>
       <div class="result-item">
         <span class="label">Confidence</span>
-        <span class="value confidence" [ngClass]="analysisResult.confidenceLevel">
+        <span class="value badge" [ngClass]="analysisResult.confidenceLevel">
           {{ analysisResult.confidenceLevel | uppercase }}
         </span>
       </div>
@@ -82,10 +79,9 @@
         <ul><li *ngFor="let w of analysisResult.warnings">{{ w }}</li></ul>
       </div>
     </div>
-
     <button class="btn btn-success btn-large" (click)="saveToLibrary()" [disabled]="saving">
       <span *ngIf="!saving">💾 Save to Library</span>
       <span *ngIf="saving">Saving…</span>
     </button>
-  </div>
+  </section>
 </div>

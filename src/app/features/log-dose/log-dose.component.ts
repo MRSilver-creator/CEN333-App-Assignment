@@ -5,24 +5,24 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FirebaseService } from '../../services/firebase.service';
 import { Medication } from '../../models/medication.model';
-import { MFormUlaComponent } from '../../m-framework/components/m-form-ula/m-form-ula.component';
 
 @Component({
   selector: 'app-log-dose',
   standalone: true,
-  imports: [CommonModule, FormsModule, MFormUlaComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './log-dose.component.html',
   styleUrl: './log-dose.component.css',
 })
 export class LogDoseComponent implements OnInit, OnDestroy {
   medications: Medication[] = [];
-  selectedMedId = '';
-  dateTaken = '';
-  notes = '';
+  selectedMedId  = '';
+  dateTaken      = '';
+  notes          = '';
   errorMsg: string | null = null;
-  saveSuccess = false;
+  successMsg: string | null = null;
   saving = false;
-  private subs: Subscription[] = [];
+
+  private sub!: Subscription;
 
   constructor(
     private firebase: FirebaseService,
@@ -31,17 +31,16 @@ export class LogDoseComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    const now = new Date();
-    now.setSeconds(0, 0);
-    this.dateTaken = now.toISOString().slice(0, 16);
+    // Default date/time to now
+    this.dateTaken = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
+      .toISOString().slice(0, 16);
 
-    this.subs.push(
-      this.firebase.getMedications().subscribe(m => {
-        this.medications = m;
-        const preId = this.route.snapshot.queryParamMap.get('medId');
-        if (preId) this.selectedMedId = preId;
-      })
-    );
+    this.sub = this.firebase.getMedications().subscribe(m => {
+      this.medications = m;
+      // Pre-fill from query param (from Library "Log Dose" button)
+      const id = this.route.snapshot.queryParamMap.get('medId');
+      if (id) this.selectedMedId = id;
+    });
   }
 
   get selectedMed(): Medication | undefined {
@@ -52,58 +51,40 @@ export class LogDoseComponent implements OnInit, OnDestroy {
     return m.nickname?.trim() || m.analysis.medicationName;
   }
 
-  validate(): boolean {
+  async save() {
     this.errorMsg = null;
 
+    // Validation
     if (!this.selectedMedId) {
-      this.errorMsg = 'Please select a medication.';
-      return false;
+      this.errorMsg = 'Please select a medication.'; return;
     }
-
-    if (!this.dateTaken) {
-      this.errorMsg = 'Please enter a date and time.';
-      return false;
-    }
-
     const taken = new Date(this.dateTaken);
-    const now = new Date();
-
+    const now   = new Date();
     if (taken > now) {
-      this.errorMsg = 'Date/time cannot be in the future.';
-      return false;
+      this.errorMsg = 'Date/time cannot be in the future.'; return;
     }
-
-    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-    if (taken < thirtyDaysAgo) {
-      this.errorMsg = 'Date/time cannot be more than 30 days in the past.';
-      return false;
+    const diff = (now.getTime() - taken.getTime()) / (1000 * 60 * 60 * 24);
+    if (diff > 30) {
+      this.errorMsg = 'Date/time cannot be more than 30 days in the past.'; return;
     }
-
-    return true;
-  }
-
-  async save() {
-    if (!this.validate()) return;
 
     this.saving = true;
     try {
+      const med = this.selectedMed!;
       await this.firebase.saveDose({
-        medicationId: this.selectedMedId,
-        medicationName: this.displayName(this.selectedMed!),
-        dateTaken: new Date(this.dateTaken).toISOString(),
-        notes: this.notes.trim() || undefined,
+        medicationId:   this.selectedMedId,
+        medicationName: this.displayName(med),
+        dateTaken:      taken.toISOString(),
+        notes:          this.notes.trim() || undefined,
       });
-
-      this.saveSuccess = true;
-      setTimeout(() => this.router.navigate(['/history']), 1200);
+      this.successMsg = '✅ Dose logged!';
+      setTimeout(() => this.router.navigate(['/history']), 1400);
     } catch {
-      this.errorMsg = 'Failed to save dose. Check Firebase config.';
+      this.errorMsg = 'Failed to save. Check your Firebase config.';
     } finally {
       this.saving = false;
     }
   }
 
-  ngOnDestroy() {
-    this.subs.forEach(s => s.unsubscribe());
-  }
+  ngOnDestroy() { this.sub?.unsubscribe(); }
 }

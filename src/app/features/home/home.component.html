@@ -1,123 +1,47 @@
-<!-- ── Scan-line overlay ───────────────────────────────────────────────── -->
-<div class="scanlines" aria-hidden="true"></div>
+<div class="hero">
+  <div class="hero-badge">AI-Powered · Cloud-Synced · Free</div>
+  <h1 class="hero-title">💊 PillSnap</h1>
+  <p class="hero-sub">
+    Photograph any medication and let Gemini AI identify it instantly.
+    Save your medications to a personal cloud library, log every dose you take,
+    and track your 7-day intake history — all synced in real time.
+  </p>
 
-<!-- ── NAV ───────────────────────────────────────────────────────────────── -->
-<nav class="nav">
-  <div class="nav-logo">
-    <span class="logo-bracket">[</span>Rx<span class="logo-bracket">]</span>
-    <span class="logo-sub">MEDIDENTIFY</span>
+  <div class="hero-actions">
+    <a routerLink="/identify" class="btn btn-primary btn-lg">📷 Identify a Medication</a>
+    <a routerLink="/library"  class="btn btn-outline btn-lg">📚 View Library</a>
   </div>
-  <div class="nav-menu">
-    <a href="#about" class="nav-link">About</a>
-    <a href="#features" class="nav-link">Features</a>
-    <button class="btn-primary nav-cta" (click)="goToIdentify()">Get Started</button>
-  </div>
-</nav>
-
-<!-- ── HERO ──────────────────────────────────────────────────────────────── -->
-<section class="hero">
-  <div class="grid-bg" aria-hidden="true"></div>
-  <div class="blob blob-1" aria-hidden="true"></div>
-  <div class="blob blob-2" aria-hidden="true"></div>
-
-  <div class="hero-inner">
-    <div class="hero-label">
-      <span class="dot"></span> AI MEDICATION IDENTIFIER
-    </div>
-
-    <h1 class="hero-h1">
-      SNAP.<br>IDENTIFY.<br><span class="h1-accent">STAY SAFE.</span>
-    </h1>
-
-    <p class="hero-p">
-      Point your camera at any medication. Gemini AI instantly identifies
-      the drug, dosage, uses, and warnings — then saves it to your
-      personal cloud library for future reference.
-    </p>
-
-    <div class="hero-actions">
-      <button class="btn-primary" (click)="goToIdentify()">
-        IDENTIFY A MEDICATION
-      </button>
-      <a href="#about" class="btn-ghost">LEARN MORE ↓</a>
-    </div>
-
-    <!-- Live stats strip -->
-    <div class="stats-strip">
-      <ng-container *ngFor="let stat of stats; let last = last">
-        <div class="stat">
-          <span class="stat-val">{{ stat.value }}</span>
-          <span class="stat-label">{{ stat.label }}</span>
-        </div>
-        <div *ngIf="!last" class="stat-divider"></div>
-      </ng-container>
-    </div>
-  </div>
-
-  <!-- Decorative terminal card -->
-  <div class="terminal-card" aria-hidden="true">
-    <div class="terminal-bar">
-      <span class="tb-dot red"></span>
-      <span class="tb-dot amber"></span>
-      <span class="tb-dot green"></span>
-      <span class="tb-title">gemini_scan.sh</span>
-    </div>
-    <div class="terminal-body">
-      <p><span class="t-prompt">$</span> <span class="t-cmd">capture --source camera</span></p>
-      <p class="t-ok">✓ Image captured (1280×720)</p>
-      <p><span class="t-prompt">$</span> <span class="t-cmd">gemini analyze --vision</span></p>
-      <p class="t-ok">✓ Medication: Paracetamol 500mg</p>
-      <p class="t-ok">✓ Confidence: HIGH</p>
-      <p><span class="t-prompt">$</span> <span class="t-cmd">firebase save --library</span></p>
-      <p class="t-ok">✓ Saved to your library</p>
-      <p class="t-cursor"><span class="t-prompt">$</span> <span class="blink">_</span></p>
-    </div>
-  </div>
-</section>
-
-<!-- ── ABOUT ──────────────────────────────────────────────────────────────── -->
-<section class="about" id="about">
-  <div class="section-header">
-    <span class="section-tag">// ABOUT</span>
-    <h2 class="section-h2">What is MedIdentify?</h2>
-    <p class="about-p">
-      MedIdentify is an AI-powered medication identification tool designed
-      to help you quickly understand any pill, capsule, or drug packaging.
-      Simply take a photo or upload an image — Gemini Vision does the rest,
-      returning the medication name, active ingredient, typical dosage,
-      common uses, and safety warnings in seconds.
-    </p>
-  </div>
-</section>
-
-<!-- ── FEATURES ───────────────────────────────────────────────────────────── -->
-<section class="features" id="features">
-  <span class="section-tag">// FEATURES</span>
-  <h2 class="section-h2">What it does</h2>
 
   <div class="features-grid">
-    <div class="feature-card" *ngFor="let f of features">
-      <div class="feat-no">{{ f.no }}</div>
-      <div class="feat-icon">{{ f.icon }}</div>
-      <div class="feat-title">{{ f.title }}</div>
-      <div class="feat-desc">{{ f.description }}</div>
+    <div class="feat-card">
+      <div class="feat-icon">📷</div>
+      <div class="feat-title">Camera &amp; Upload</div>
+      <div class="feat-desc">Use your live camera or upload an image — both paths feed the same AI pipeline.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🤖</div>
+      <div class="feat-title">Gemini Vision AI</div>
+      <div class="feat-desc">Returns medication name, active ingredient, dosage, uses, warnings, and a confidence score.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">📚</div>
+      <div class="feat-title">Cloud Library</div>
+      <div class="feat-desc">Identified medications are saved to Firebase and sync across all your devices in real time.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">💊</div>
+      <div class="feat-title">Dose Logging</div>
+      <div class="feat-desc">Record when you took each medication with optional notes. Date/time defaults to now.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">📋</div>
+      <div class="feat-title">Intake History</div>
+      <div class="feat-desc">Full sortable history table with the most recent dose highlighted, filtered by medication name.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">📊</div>
+      <div class="feat-title">7-Day Chart</div>
+      <div class="feat-desc">A bar chart showing how many doses you took per day over the last 7 days.</div>
     </div>
   </div>
-</section>
-
-<!-- ── CTA ────────────────────────────────────────────────────────────────── -->
-<section class="cta-section">
-  <div class="cta-inner">
-    <p class="cta-tag">READY TO START?</p>
-    <h2 class="cta-h2">Identify your first medication now.</h2>
-    <button class="btn-primary btn-lg" (click)="goToIdentify()">IDENTIFY A MEDICATION →</button>
-  </div>
-</section>
-
-<!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
-<footer class="footer">
-  <div class="footer-logo">
-    <span class="logo-bracket">[</span>Rx<span class="logo-bracket">]</span> MEDIDENTIFY
-  </div>
-  <p class="footer-copy">CEN333 · Assignment</p>
-</footer>
+</div>

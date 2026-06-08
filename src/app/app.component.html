@@ -1,20 +1,21 @@
-<header class="top-shell">
-  <div class="brand">💊 PillSnap</div>
-
-  <nav class="top-nav">
-    <a [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-    <a [routerLink]="['/identify']" routerLinkActive="active">Identify</a>
-    <a [routerLink]="['/library']" routerLinkActive="active">Library</a>
-    <a [routerLink]="['/log-dose']" routerLinkActive="active">Log Dose</a>
-    <a [routerLink]="['/history']" routerLinkActive="active">History</a>
-  </nav>
-</header>
-
-<div class="app-page-content">
-  <div class="disclaimer-banner">
-    ⚠️ Educational use only. PillSnap is not a diagnostic or medical advice tool.
-    Always verify medications with a pharmacist or doctor.
-  </div>
-
-  <router-outlet></router-outlet>
+<!-- Disclaimer banner (Assignment requirement) -->
+<div class="disclaimer">
+  ⚠️ <strong>Educational use only.</strong> PillSnap is not a diagnostic or medical advice tool.
+  Always verify with a pharmacist or doctor.
 </div>
+
+<!-- Top navigation -->
+<nav class="top-nav">
+  <a class="nav-logo" routerLink="/">💊 PillSnap</a>
+  <div class="nav-links">
+    <a routerLink="/"         routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
+    <a routerLink="/identify" routerLinkActive="active">Identify</a>
+    <a routerLink="/library"  routerLinkActive="active">Library</a>
+    <a routerLink="/log-dose" routerLinkActive="active">Log Dose</a>
+    <a routerLink="/history"  routerLinkActive="active">History</a>
+  </div>
+</nav>
+
+<main class="main-content">
+  <router-outlet />
+</main>
