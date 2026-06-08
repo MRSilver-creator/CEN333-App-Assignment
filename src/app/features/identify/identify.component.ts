@@ -99,8 +99,9 @@ export class IdentifyComponent implements OnDestroy {
         this.errorMsg = 'Low confidence — please retake the photo with better lighting or proceed manually.';
       }
       this.analysisResult = result;
-    } catch {
-      this.errorMsg = 'Gemini analysis failed. Check your API key or try again.';
+    } catch (err: any) {
+      // Show the real error message from the service
+      this.errorMsg = err?.message ?? 'Gemini analysis failed. Check your API key or try again.';
     } finally {
       this.analyzing = false;
     }
