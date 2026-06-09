@@ -6,7 +6,17 @@
 
 <!-- Top navigation -->
 <nav class="top-nav">
-  <a class="nav-logo" routerLink="/">💊 PillSnap</a>
+  <!-- University logo -->
+  <a class="nav-logo" routerLink="/">
+    <img
+      src="assets/university-logo.png"
+      alt="University Logo"
+      class="uni-logo"
+      onerror="this.style.display='none'"
+    />
+    <span class="logo-text">💊 PillSnap</span>
+  </a>
+
   <div class="nav-links">
     <a routerLink="/"         routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
     <a routerLink="/identify" routerLinkActive="active">Identify</a>
@@ -19,3 +29,19 @@
 <main class="main-content">
   <router-outlet />
 </main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <img
+      src="assets/university-logo.png"
+      alt="University Logo"
+      class="footer-logo"
+      onerror="this.style.display='none'"
+    />
+    <div class="footer-text">
+      <span class="footer-credit">Designed by: <strong>Wassim Saad</strong></span>
+      <span class="footer-course">CEN333 / BME433 &mdash; Cross-Platform Mobile Application Development</span>
+    </div>
+  </div>
+</footer>

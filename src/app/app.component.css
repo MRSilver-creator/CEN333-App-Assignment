@@ -1,11 +1,13 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   font-family: 'Segoe UI', sans-serif;
   background: #0f1117;
   color: #e8eaf0;
-  min-height: 100vh;
 }
 
+/* ── Disclaimer ──────────────────────────────────────────── */
 .disclaimer {
   background: #2d1b00;
   border-bottom: 2px solid #ff8c00;
@@ -16,11 +18,12 @@
   letter-spacing: 0.01em;
 }
 
+/* ── Top Nav ─────────────────────────────────────────────── */
 .top-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.8rem 2rem;
+  padding: 0.6rem 2rem;
   background: #161820;
   border-bottom: 1px solid #2a2d3a;
   position: sticky;
@@ -29,10 +32,23 @@
 }
 
 .nav-logo {
-  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none;
+}
+
+.uni-logo {
+  height: 42px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.logo-text {
+  font-size: 1.15rem;
   font-weight: 700;
   color: #7c8fff;
-  text-decoration: none;
   letter-spacing: 0.04em;
 }
 
@@ -51,17 +67,62 @@
   border-bottom: 2px solid transparent;
 }
 
-.nav-links a:hover {
-  color: #e8eaf0;
-}
+.nav-links a:hover  { color: #e8eaf0; }
+.nav-links a.active { color: #7c8fff; border-bottom-color: #7c8fff; }
 
-.nav-links a.active {
-  color: #7c8fff;
-  border-bottom-color: #7c8fff;
-}
-
+/* ── Main content grows to fill space above footer ────────── */
 .main-content {
+  flex: 1;
   padding: 2rem;
   max-width: 1100px;
   margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+.footer {
+  background: #161820;
+  border-top: 1px solid #2a2d3a;
+  padding: 1.2rem 2rem;
+  margin-top: auto;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.footer-logo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.85;
+}
+
+.footer-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  text-align: center;
+}
+
+.footer-credit {
+  font-size: 0.9rem;
+  color: #e8eaf0;
+}
+
+.footer-credit strong {
+  color: #7c8fff;
+}
+
+.footer-course {
+  font-size: 0.75rem;
+  color: #636880;
+  letter-spacing: 0.02em;
 }
