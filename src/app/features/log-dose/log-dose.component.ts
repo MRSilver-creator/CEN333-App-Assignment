@@ -31,13 +31,11 @@ export class LogDoseComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // Default date/time to now
     this.dateTaken = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
       .toISOString().slice(0, 16);
 
     this.sub = this.firebase.getMedications().subscribe(m => {
       this.medications = m;
-      // Pre-fill from query param (from Library "Log Dose" button)
       const id = this.route.snapshot.queryParamMap.get('medId');
       if (id) this.selectedMedId = id;
     });
@@ -54,7 +52,6 @@ export class LogDoseComponent implements OnInit, OnDestroy {
   async save() {
     this.errorMsg = null;
 
-    // Validation
     if (!this.selectedMedId) {
       this.errorMsg = 'Please select a medication.'; return;
     }
@@ -79,8 +76,10 @@ export class LogDoseComponent implements OnInit, OnDestroy {
       });
       this.successMsg = '✅ Dose logged!';
       setTimeout(() => this.router.navigate(['/history']), 1400);
-    } catch {
-      this.errorMsg = 'Failed to save. Check your Firebase config.';
+    } catch (err: any) {
+      // Show the real Firebase error so you can diagnose it
+      console.error('saveDose failed:', err);
+      this.errorMsg = `Failed to save dose: ${err?.message ?? 'Check your Firebase config (databaseURL, rules)'}`;
     } finally {
       this.saving = false;
     }
